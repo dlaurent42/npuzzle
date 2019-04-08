@@ -1,23 +1,21 @@
 const fs = require('fs');
-
-const parseFile = require('../../src/utils/parse');
-const finalPuzzle = require('../../src/utils/finalPuzzle');
-const isSolvable = require('../../src/utils/isSolvable');
+const { isEmpty } = require('lodash');
+const Puzzle = require('../../src/helpers/Puzzle');
 
 if (process.argv[2]) {
   let i = 2;
   while (process.argv[i]) {
     console.log(`Parsing argv[${i}]: ${process.argv[i]}`);
-    const res = parseFile(fs.readFileSync(process.argv[i], 'utf8'));
-    if (res.error) console.error('An error occured while parsing.');
+    const P = new Puzzle();
+    P.getPuzzle(fs.readFileSync(process.argv[i], 'utf8'));
+    if (!isEmpty(P.errors)) P.printErrors();
     else {
-      const final = finalPuzzle(res.size);
-      const solvable = isSolvable(res.puzzle, final, res.size);
-      console.log('Parsed puzzle:');
-      console.log(res);
-      console.log('Snail solution:');
-      console.log(final);
-      console.log(`Is solvable: ${solvable}`);
+      P.getSnailPuzzle();
+      P.isPuzzleSolvable();
+      P.printSize();
+      P.printPuzzle();
+      P.printSnail();
+      P.printSolvable();
     }
     if (process.argv[i + 1]) console.log('\n');
     i += 1;
