@@ -64,7 +64,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
-    "parser": "node scripts/project/parser.js"
+    "testParser": "node scripts/project/testParser.js"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -4,15 +4,15 @@ const { isEmpty, findIndex } = require('lodash');
 const parseFileContent = (fileContent) => {
 
   // puzzle contains problem data
-  const puzzle = {
+  const npuzzle = {
     error: true,
     size: undefined,
-    taquins: [], // Taquin is an array of object containg { x, y, value }
+    puzzle: [], // Taquin is an array of object containg { x, y, value }
   };
 
   // verify file content
-  if (isEmpty(fileContent)) return puzzle;
-  puzzle.error = false;
+  if (isEmpty(fileContent)) return npuzzle;
+  npuzzle.error = false;
 
   // parse file content
   let y = 0;
@@ -30,30 +30,30 @@ const parseFileContent = (fileContent) => {
       const value = parseInt(block, 10);
 
       // Check if block contains only digits
-      if (!/^\d+$/.test(block)) puzzle.error = true;
+      if (!/^\d+$/.test(block)) npuzzle.error = true;
 
       // Check if block is puzzle size but with a value lesser than 3
-      else if (!puzzle.size && value < 3) puzzle.error = true;
+      else if (!npuzzle.size && value < 3) npuzzle.error = true;
 
       // Check if there is another numeric block after puzzle size
-      else if (puzzle.size && isPuzzleSize) puzzle.error = true;
+      else if (npuzzle.size && isPuzzleSize) npuzzle.error = true;
 
       // Check dimensions of puzzle regarding puzzle size
-      else if (puzzle.size && (y > puzzle.size || x >= puzzle.size)) puzzle.error = true;
+      else if (npuzzle.size && (y > npuzzle.size || x >= npuzzle.size)) npuzzle.error = true;
 
       // Check values regarding puzzle size
-      else if (puzzle.size && value >= puzzle.size * puzzle.size) puzzle.error = true;
+      else if (npuzzle.size && value >= npuzzle.size * npuzzle.size) npuzzle.error = true;
 
       // Check if value is already in puzzle structure
-      else if (puzzle.size && findIndex(puzzle.taquins, { value }) > -1) puzzle.error = true;
+      else if (npuzzle.size && findIndex(npuzzle.puzzle, { value }) > -1) npuzzle.error = true;
 
       // Get puzzle size
-      else if (!puzzle.size) {
-        puzzle.size = value;
+      else if (!npuzzle.size) {
+        npuzzle.size = value;
         isPuzzleSize = true;
 
       // Push taquin to structure
-      } else puzzle.taquins.push({ x, y: y - 1, value });
+      } else npuzzle.puzzle.push({ x, y: y - 1, value });
 
       // Increment x
       x += 1;
@@ -64,10 +64,10 @@ const parseFileContent = (fileContent) => {
   });
 
   // Check number of taquins
-  if (!puzzle.error && puzzle.taquins.length < puzzle.size * puzzle.size) puzzle.error = true;
+  if (!npuzzle.error && npuzzle.puzzle.length < npuzzle.size * npuzzle.size) npuzzle.error = true;
 
   // file content is parsed
-  return puzzle;
+  return npuzzle;
 };
 
 module.exports = parseFileContent;

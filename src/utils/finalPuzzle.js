@@ -3,21 +3,13 @@ const finalPuzzle = (size) => {
   // Check size
   if (size < 3) return [];
 
-  // eslint trick
+  // Declare used variables
   let n = size;
-
-  // a is the result matrix
-  const matrix = [];
-
-  // direction: right, bottom = 1; left, top = -1
-  let direction = 1;
-
-  // c is the counter value.
-  let counter = 0;
-
-  // x and y are the coordinates of the number in the matrix
+  let direction = 1; // direction: right, bottom = 1; left, top = -1
+  let counter = 0; // counter value
   let y = 0;
   let x = -1;
+  const matrix = [];
 
   // for n in [n ... 0]
   while (n) {
