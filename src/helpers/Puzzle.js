@@ -14,7 +14,10 @@ class Puzzle {
   getPuzzle(fileContent) {
 
     // verify if file content is empty
-    if (isEmpty(fileContent)) return;
+    if (isEmpty(fileContent)) {
+      this.errors.push('File is empty.');
+      return;
+    }
 
     // parse file content
     let lineNumber = 1;
@@ -33,22 +36,22 @@ class Puzzle {
         const value = parseInt(block, 10);
 
         // Check if block contains only digits
-        if (!/^\d+$/.test(block)) this.errors.push(`Error at line ${lineNumber}: ${block} is not numeric.`);
+        if (!/^\d+$/.test(block)) this.errors.push(`Line ${lineNumber}: ${block} is not numeric.`);
 
         // Check if block is puzzle size but with a value lesser than 3
-        else if (!this.size && value < 3) this.errors.push(`Error at line ${lineNumber}: puzzle size ${value} is lesser than 3.`);
+        else if (!this.size && value < 3) this.errors.push(`Line ${lineNumber}: puzzle size ${value} is lesser than 3.`);
 
         // Check if there is another numeric block after puzzle size
-        else if (this.size && isPuzzleSize) this.errors.push(`Error at line ${lineNumber}: an argument has been provided after puzzle size (${block}).`);
+        else if (this.size && isPuzzleSize) this.errors.push(`Line ${lineNumber}: an argument has been provided after puzzle size (${block}).`);
 
         // Check dimensions of puzzle regarding puzzle size
-        else if (this.size && (y > this.size || x >= this.size)) this.errors.push(`Error at line ${lineNumber}: an argument is outside the grid.`);
+        else if (this.size && (y > this.size || x >= this.size)) this.errors.push(`Line ${lineNumber}: an argument is outside the grid.`);
 
         // Check values regarding puzzle size
-        else if (this.size && value >= this.size * this.size) this.errors.push(`Error at line ${lineNumber}: ${value} is greater or equal to ${this.size * this.size}.`);
+        else if (this.size && value >= this.size * this.size) this.errors.push(`Line ${lineNumber}: ${value} is greater or equal to ${this.size * this.size}.`);
 
         // Check if value is already in puzzle structure
-        else if (this.size && findIndex(this.puzzle, { value }) > -1) this.errors.push(`Error at line ${lineNumber}: ${value} is a dupplicate.`);
+        else if (this.size && findIndex(this.puzzle, { value }) > -1) this.errors.push(`Line ${lineNumber}: ${value} is a dupplicate.`);
 
         // Get puzzle size
         else if (!this.size) {
@@ -148,7 +151,7 @@ class Puzzle {
 
   printErrors() {
     if (this.errors.length === 0) console.log('No error occured during parsing.');
-    else this.errors.forEach((err, idx) => { console.log(`[${idx}]\t${err}`); });
+    else this.errors.forEach((err, idx) => { console.log(`[ERROR ${idx + 1}]: ${err}`); });
   }
 
   printSnail() {

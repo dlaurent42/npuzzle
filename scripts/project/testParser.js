@@ -2,22 +2,34 @@ const fs = require('fs');
 const { isEmpty } = require('lodash');
 const Puzzle = require('../../src/helpers/Puzzle');
 
+const runWithFile = (file) => {
+  console.log(`Parsing ${file}`);
+  const P = new Puzzle();
+  P.getPuzzle(fs.readFileSync(file, 'utf8'));
+  if (!isEmpty(P.errors)) P.printErrors();
+  else {
+    P.getSnailPuzzle();
+    P.isPuzzleSolvable();
+    P.printSize();
+    P.printPuzzle();
+    P.printSnail();
+    P.printSolvable();
+  }
+};
+
+// If files are specified then each file is tested
 if (process.argv[2]) {
   let i = 2;
   while (process.argv[i]) {
-    console.log(`Parsing argv[${i}]: ${process.argv[i]}`);
-    const P = new Puzzle();
-    P.getPuzzle(fs.readFileSync(process.argv[i], 'utf8'));
-    if (!isEmpty(P.errors)) P.printErrors();
-    else {
-      P.getSnailPuzzle();
-      P.isPuzzleSolvable();
-      P.printSize();
-      P.printPuzzle();
-      P.printSnail();
-      P.printSolvable();
-    }
-    if (process.argv[i + 1]) console.log('\n');
+    runWithFile(process.arvg[i]);
+    console.log('\n');
     i += 1;
   }
-} else console.error('Please provide a file as input.');
+
+// If no file is specified, each file from resources is tested
+} else {
+  fs.readdirSync('../../resources').forEach((file) => {
+    runWithFile(file);
+    console.log('\n');
+  });
+}
