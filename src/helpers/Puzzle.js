@@ -1,14 +1,24 @@
-const { isEmpty, findIndex, find } = require('lodash');
+const {
+  isEmpty,
+  findIndex,
+  find,
+  min,
+} = require('lodash');
 
 // This class handles all data and methods relative to the puzzle
 class Puzzle {
 
   constructor() {
+    // Variables relative to initialisation
     this.size = undefined;
     this.errors = [];
     this.snail = [];
     this.puzzle = [];
     this.solvable = false;
+
+    // Variables relative to solving
+    this.steps = [];
+    this.lastMove = undefined;
   }
 
   getPuzzle(fileContent) {
@@ -142,6 +152,61 @@ class Puzzle {
       const numberOfRows = this.size - row.y;
       this.solvable = (numberOfRows % 2 === 0 && numberOfPermutations % 2 === 1)
                    || (numberOfRows % 2 === 1 && numberOfPermutations % 2 === 0);
+    }
+  }
+
+  static getAStarManhattanDistance(direction) {
+
+    // Copy last step puzzle
+    const puzzle = [...this.steps[this.steps - 1]];
+
+    // Get map index following direction and coordinates
+    const zeroIdx = findIndex(puzzle, { value: 0 });
+    let swappedIdx = -1;
+    if (direction === 'down') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y + 1 });
+    else if (direction === 'up') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y - 1 });
+    else if (direction === 'left') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x - 1, y: puzzle[zeroIdx].y });
+    else if (direction === 'right') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y });
+
+    // Swap values
+    let tmp = puzzle[zeroIdx].x;
+    puzzle[zeroIdx].x = puzzle[swappedIdx].x;
+    puzzle[swappedIdx].x = tmp;
+    tmp = puzzle[zeroIdx].y;
+    puzzle[zeroIdx].y = puzzle[swappedIdx].y;
+    puzzle[swappedIdx].y = tmp;
+
+    // Assess manhattan distance
+    let manhattanDistance = 0;
+    puzzle.forEach((el) => {
+      const snail = find(this.snail, { value: el.value });
+      manhattanDistance += Math.abs(snail.x - el.x) + Math.abs(snail.y - el.y);
+    });
+
+    // Return object containing all necessary information to proceed
+    return { direction, manhattanDistance, puzzle };
+  }
+
+  solveAStarManhattan() {
+    // Verify input
+    if (!this.solvable) return;
+
+    // Declare variable
+    const manhattanDistance = -1;
+    while (manhattanDistance) {
+
+      // possibilities contains manhattan distances of each possible move
+      const possibilities = [];
+
+      // Get possible swaps
+      const zeroPosition = find(this.steps[this.steps.length - 1], { value: 0 });
+
+      if (this.lastMove !== 'up' && zeroPosition.y + 1 < this.size) possibilities.push(this.getAStarManhattanDistance('down'));
+      if (this.lastMove !== 'down' && zeroPosition.y) possibilities.push(this.getAStarManhattanDistance('up'));
+      if (this.lastMove !== 'left' && zeroPosition.x + 1 < this.size) possibilities.push(this.getAStarManhattanDistance('right'));
+      if (this.lastMove !== 'right' && zeroPosition.x) possibilities.push(this.getAStarManhattanDistance('left'));
+
+      console.log(manhattanDistance);
     }
   }
 
