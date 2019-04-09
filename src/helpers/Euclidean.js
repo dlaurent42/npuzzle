@@ -43,7 +43,9 @@ class Euclidean extends Puzzle {
     let distance = 0;
     puzzle.forEach((el) => {
       const snail = find(this.snail, { value: el.value });
-      distance += Math.sqrt(((snail.x - el.x) ** 2) + ((snail.y - el.y) ** 2));
+      const dx = Math.abs(snail.x - el.x);
+      const dy = Math.abs(snail.y - el.y);
+      distance += (dx + dy + (Math.sqrt(2) - 2) * Math.min(dx, dy));
     });
     return distance;
   }
