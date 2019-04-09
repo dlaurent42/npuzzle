@@ -1,20 +1,20 @@
 const fs = require('fs');
 const { isEmpty } = require('lodash');
-const Puzzle = require('../../src/helpers/Puzzle');
+const Manhattan = require('../../src/helpers/Manhattan');
 
 const runWithFile = (file) => {
   console.log(`Parsing ${file}`);
-  const P = new Puzzle();
+  const P = new Manhattan();
   P.getPuzzle(fs.readFileSync(file, 'utf8'));
   if (!isEmpty(P.errors)) P.printErrors();
   else {
     P.getSnailPuzzle();
     P.isPuzzleSolvable();
     // P.printSize();
-    // P.printPuzzle();
+    // P.printPuzzle(P.puzzle);
     // P.printSnail();
     // P.printSolvable();
-    P.solveAStarManhattan();
+    P.solve();
   }
 };
 
