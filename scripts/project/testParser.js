@@ -10,10 +10,11 @@ const runWithFile = (file) => {
   else {
     P.getSnailPuzzle();
     P.isPuzzleSolvable();
-    P.printSize();
-    P.printPuzzle();
-    P.printSnail();
-    P.printSolvable();
+    // P.printSize();
+    // P.printPuzzle();
+    // P.printSnail();
+    // P.printSolvable();
+    P.solveAStarManhattan();
   }
 };
 
@@ -21,7 +22,7 @@ const runWithFile = (file) => {
 if (process.argv[2]) {
   let i = 2;
   while (process.argv[i]) {
-    runWithFile(process.arvg[i]);
+    runWithFile(process.argv[i]);
     console.log('\n');
     i += 1;
   }

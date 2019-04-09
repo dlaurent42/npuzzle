@@ -2,7 +2,6 @@ const {
   isEmpty,
   findIndex,
   find,
-  min,
 } = require('lodash');
 
 // This class handles all data and methods relative to the puzzle
@@ -155,26 +154,45 @@ class Puzzle {
     }
   }
 
-  static getAStarManhattanDistance(direction) {
+  printPuzzleFormatted(puzzle) {
+    let y = 0;
+    while (y < this.size) {
+      let x = 0;
+      while (x < this.size) {
+        const obj = find(puzzle, { x, y });
+        process.stdout.write(`${obj.value} `);
+        x += 1;
+      }
+      console.log('');
+      y += 1;
+    }
+  }
+
+  getAStarManhattanDistance(direction) {
 
     // Copy last step puzzle
-    const puzzle = [...this.steps[this.steps - 1]];
+    const puzzle = isEmpty(this.steps) ? this.puzzle.slice() : this.steps[this.steps.length - 1].puzzle.slice();
 
     // Get map index following direction and coordinates
     const zeroIdx = findIndex(puzzle, { value: 0 });
     let swappedIdx = -1;
+    console.log(`Testing ${direction} with`); // debug
+    this.printPuzzleFormatted(this.puzzle); // debug
     if (direction === 'down') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y + 1 });
     else if (direction === 'up') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y - 1 });
     else if (direction === 'left') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x - 1, y: puzzle[zeroIdx].y });
-    else if (direction === 'right') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y });
+    else if (direction === 'right') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x + 1, y: puzzle[zeroIdx].y });
 
     // Swap values
-    let tmp = puzzle[zeroIdx].x;
-    puzzle[zeroIdx].x = puzzle[swappedIdx].x;
-    puzzle[swappedIdx].x = tmp;
-    tmp = puzzle[zeroIdx].y;
-    puzzle[zeroIdx].y = puzzle[swappedIdx].y;
-    puzzle[swappedIdx].y = tmp;
+    if (direction === 'left' || direction === 'right') {
+      const tmp = puzzle[zeroIdx].x;
+      puzzle[zeroIdx].x = puzzle[swappedIdx].x;
+      puzzle[swappedIdx].x = tmp;
+    } else {
+      const tmp = puzzle[zeroIdx].y;
+      puzzle[zeroIdx].y = puzzle[swappedIdx].y;
+      puzzle[swappedIdx].y = tmp;
+    }
 
     // Assess manhattan distance
     let manhattanDistance = 0;
@@ -183,6 +201,8 @@ class Puzzle {
       manhattanDistance += Math.abs(snail.x - el.x) + Math.abs(snail.y - el.y);
     });
 
+    console.log(`SwappedIndex = ${swappedIdx}`); // debug
+    this.printPuzzleFormatted(this.puzzle); // debug
     // Return object containing all necessary information to proceed
     return { direction, manhattanDistance, puzzle };
   }
@@ -191,23 +211,39 @@ class Puzzle {
     // Verify input
     if (!this.solvable) return;
 
+    this.printPuzzleFormatted(this.puzzle); // debug
     // Declare variable
-    const manhattanDistance = -1;
+    let manhattanDistance = -1;
     while (manhattanDistance) {
 
       // possibilities contains manhattan distances of each possible move
       const possibilities = [];
 
       // Get possible swaps
-      const zeroPosition = find(this.steps[this.steps.length - 1], { value: 0 });
-
+      const zeroPosition = find(isEmpty(this.steps) ? this.puzzle : this.steps[this.steps.length - 1].puzzle, { value: 0 });
       if (this.lastMove !== 'up' && zeroPosition.y + 1 < this.size) possibilities.push(this.getAStarManhattanDistance('down'));
       if (this.lastMove !== 'down' && zeroPosition.y) possibilities.push(this.getAStarManhattanDistance('up'));
       if (this.lastMove !== 'left' && zeroPosition.x + 1 < this.size) possibilities.push(this.getAStarManhattanDistance('right'));
       if (this.lastMove !== 'right' && zeroPosition.x) possibilities.push(this.getAStarManhattanDistance('left'));
 
-      console.log(manhattanDistance);
+      // Find best solution
+      let solution = {...possibilities[0]};
+      possibilities.forEach((el) => {
+        if (solution.manhattanDistance > el.manhattanDistance) solution = {...el};
+      })
+
+      // Reset params following best solution
+      this.lastMove = solution.direction;
+      this.steps.push(solution);
+      manhattanDistance = solution.manhattanDistance;
+      console.log(`Step number ${this.steps.length}`); // debug
+      console.log(`Manhattan distance ${manhattanDistance}`); // debug
+      console.log(`Last move is ${solution.direction}`); // debug
+      this.printPuzzleFormatted(solution.puzzle); // debug
+      console.log('\n'); // debug
     }
+    console.log('Printing steps'); // debug
+    console.log(this.steps); // debug
   }
 
   printSize() {
