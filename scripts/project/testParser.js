@@ -1,36 +1,86 @@
 const fs = require('fs');
 const { isEmpty } = require('lodash');
-const LinearConflict = require('../../src/helpers/LinearConflict');
+const Solver = require('../../src/helpers/Solver');
 
+const printSolution = (P) => {
+  console.log('');
+  console.log(`Heuristic ${P.heuristic} (greedy: ${P.greedySearch}, uniform: ${P.uniformCost})`);
+  console.log(`Complexity in size: ${P.complexityInSize}`);
+  console.log(`Complexity in time: ${P.complexityInTime}`);
+  console.log(`Number of swaps: ${P.numberOfSwaps}`);
+  console.log(`Execution duration: ${P.duration}ms`);
+};
+
+// Function to run all heuristics with given file
 const runWithFile = (file) => {
-  console.log(`Parsing ${file}`);
-  const P = new LinearConflict();
+
+  // Echo filename
+  console.log(`${file}`);
+
+  // Declare a new puzzle and parse file
+  // By default, simple Manhattan will be considered
+  const P = new Solver();
   P.getPuzzle(fs.readFileSync(file, 'utf8'));
+
+  // Print errors in case of error
   if (!isEmpty(P.errors)) P.printErrors();
   else {
+
+    // Assess snail solution
     P.getSnailPuzzle();
+
+    // Check if puzzle is solvable
     P.isPuzzleSolvable();
-    // P.printSize();
-    // P.printPuzzle(P.puzzle);
-    // P.printSnail();
-    // P.printSolvable();
+
+    // Solve it
     P.solve();
-    console.log(`Complexity in size: ${P.complexityInSize}`);
-    console.log(`Complexity in time: ${P.complexityInTime}`);
-    console.log(`Number of swaps: ${P.numberOfSwaps}`);
-    P.finalSet.forEach((el, idx) => {
-      if (idx) {
-        console.log(`\nMove ${el.move}`);
-        console.log(`Distance: ${el.distance}`);
-        console.log(`Cost: ${el.cost}`);
-      } else console.log('\nInitial situation');
-      P.printPuzzle(el.puzzle);
-    });
+    printSolution(P);
+
+    // Lauch Manhattan, greedySearch
+    P.reset('Manhattan', true, false);
+    P.solve();
+    printSolution(P);
+
+    // Lauch Manhattan, uniformCost
+    P.reset('Manhattan', false, true);
+    P.solve();
+    printSolution(P);
+
+    // Lauch Euclidean
+    P.reset('Euclidean', false, false);
+    P.solve();
+    printSolution(P);
+
+    // Lauch Euclidean, greedySearch
+    P.reset('Euclidean', true, false);
+    P.solve();
+    printSolution(P);
+
+    // Lauch Euclidean, uniformCost
+    P.reset('Euclidean', false, true);
+    P.solve();
+    printSolution(P);
+
+    // Lauch LinearConflict
+    P.reset('LinearConflict', false, false);
+    P.solve();
+    printSolution(P);
+
+    // Lauch LinearConflict, greedySearch
+    P.reset('LinearConflict', true, false);
+    P.solve();
+    printSolution(P);
+
+    // Lauch LinearConflict, uniformCost
+    P.reset('LinearConflict', false, true);
+    P.solve();
+    printSolution(P);
   }
 };
 
 // If files are specified then each file is tested
 if (process.argv[2]) {
+
   let i = 2;
   while (process.argv[i]) {
     runWithFile(process.argv[i]);

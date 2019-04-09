@@ -3,6 +3,7 @@ const {
   find,
   cloneDeep,
 } = require('lodash');
+const moment = require('moment');
 
 const PriorityQueue = require('./PriorityQueue');
 const Puzzle = require('./Puzzle');
@@ -22,6 +23,8 @@ class Manhattan extends Puzzle {
     this.finalSet = [];
     this.closedSet = [];
     this.OpenSet = new PriorityQueue();
+
+    this.duration = null;
   }
 
   puzzleToIndex(puzzle) {
@@ -93,6 +96,9 @@ class Manhattan extends Puzzle {
   }
 
   solve() {
+    // Variable used to assess execution duration
+    const timestamp = moment();
+
     // Initialize solver
     this.OpenSet.enqueue({
       parent: null,
@@ -123,6 +129,7 @@ class Manhattan extends Puzzle {
         solutionFound = true;
         this.numberOfSwaps = element.cost;
         this.complexityInTime = this.closedSet.length;
+        this.duration = timestamp.diff(moment());
         this.getFinalSet();
         return;
       }
