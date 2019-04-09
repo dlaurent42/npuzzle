@@ -1,10 +1,10 @@
 const {
-  isEmpty,
   findIndex,
   find,
   cloneDeep,
 } = require('lodash');
 
+const PriorityQueue = require('./PriorityQueue');
 const Puzzle = require('./Puzzle');
 
 // This class handles all data and methods relative to Manhattan resolution
@@ -13,80 +13,128 @@ class Manhattan extends Puzzle {
   constructor() {
     super();
 
-    // Variables relative to solving
-    this.steps = [];
+    // Indicators
+    this.numberOfSwaps = 0;
+    this.complexityInSize = 1;
+    this.complexityInTime = 1;
+
+    // Sets used to solve puzzle
+    this.finalSet = [];
+    this.closedSet = [];
+    this.OpenSet = new PriorityQueue();
   }
 
-  getDistance(direction) {
+  puzzleToIndex(puzzle) {
+    let y = 0;
+    let str = '';
+    while (y < this.size) {
+      let x = 0;
+      while (x < this.size) {
+        const obj = find(puzzle, { x, y });
+        str += `${obj.value}`;
+        x += 1;
+      }
+      y += 1;
+    }
+    return str;
+  }
 
-    // Get map index following direction and coordinates
-    const puzzle = cloneDeep(this.steps[this.steps.length - 1].puzzle);
-    const zeroIdx = findIndex(puzzle, { value: 0 });
-    let swappedIdx = -1;
-
-    if (direction === 'down') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y + 1 });
-    else if (direction === 'up') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y - 1 });
-    else if (direction === 'left') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x - 1, y: puzzle[zeroIdx].y });
-    else if (direction === 'right') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x + 1, y: puzzle[zeroIdx].y });
-
-    // Swap values
-    if (direction === 'left' || direction === 'right') [puzzle[zeroIdx].x, puzzle[swappedIdx].x] = [puzzle[swappedIdx].x, puzzle[zeroIdx].x];
-    else [puzzle[zeroIdx].y, puzzle[swappedIdx].y] = [puzzle[swappedIdx].y, puzzle[zeroIdx].y];
-
-    // Assess manhattan distance
+  getDistance(puzzle) {
     let distance = 0;
     puzzle.forEach((el) => {
       const snail = find(this.snail, { value: el.value });
       distance += Math.abs(snail.x - el.x) + Math.abs(snail.y - el.y);
     });
-    console.log(`... Testing direction ${direction} -> ${distance}`);
-    this.printPuzzle(puzzle);
-    console.log('');
-    // Return object containing all necessary information to proceed
-    return { direction, distance, puzzle };
+    return distance;
+  }
+
+  swapPieces(element, move) {
+
+    // Get map index following move and coordinates
+    const puzzle = cloneDeep(element.puzzle);
+    const zeroIdx = findIndex(puzzle, { value: 0 });
+    let swappedIdx = -1;
+
+    if (move === 'down') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y + 1 });
+    else if (move === 'up') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x, y: puzzle[zeroIdx].y - 1 });
+    else if (move === 'left') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x - 1, y: puzzle[zeroIdx].y });
+    else if (move === 'right') swappedIdx = findIndex(puzzle, { x: puzzle[zeroIdx].x + 1, y: puzzle[zeroIdx].y });
+
+    // Swap values
+    if (move === 'left' || move === 'right') [puzzle[zeroIdx].x, puzzle[swappedIdx].x] = [puzzle[swappedIdx].x, puzzle[zeroIdx].x];
+    else [puzzle[zeroIdx].y, puzzle[swappedIdx].y] = [puzzle[swappedIdx].y, puzzle[zeroIdx].y];
+
+    // Get distance
+    const distance = this.getDistance(puzzle);
+
+    // Get index from puzzle
+    const index = this.puzzleToIndex(puzzle);
+
+    // Check in closeSet if a solution drives us to this puzzle with a lower cost
+    const inClosedSet = find(this.closedSet, { index });
+    if (inClosedSet && inClosedSet.cost <= element.cost + 1 && inClosedSet.move === move) return;
+
+    // Enqueue element
+    this.OpenSet.enqueue({
+      parent: element.index,
+      index,
+      move,
+      puzzle,
+      cost: element.cost + 1,
+      distance,
+    }, distance + element.cost + 1);
+  }
+
+  getFinalSet() {
+    this.finalSet.push(this.closedSet[this.closedSet.length - 1]);
+    while (this.finalSet[0].parent) {
+      this.finalSet.splice(0, 0, find(this.closedSet, { index: this.finalSet[0].parent }));
+    }
   }
 
   solve() {
+    // Initialize solver
+    this.OpenSet.enqueue({
+      parent: null,
+      index: this.puzzleToIndex(this.puzzle),
+      move: null,
+      puzzle: cloneDeep(this.puzzle),
+      cost: 0,
+      distance: this.getDistance(this.puzzle),
+    }, 0);
 
-    // Verify input
-    if (!this.solvable) return;
+    // Define a variable to determine wheter to continue or not
+    let solutionFound = false;
 
-    // Declare variable
-    let lastStep = {
-      direction: 'none',
-      distance: -1,
-      puzzle: cloneDeep(this.puzzle)
-    };
-    this.steps.push(lastStep);
+    // Main loop
+    while (!solutionFound) {
 
-    console.log('Initial situation');
-    this.printPuzzle(lastStep.puzzle);
-    console.log('');
+      // Assess complexity in size
+      this.complexityInSize = Math.max(this.complexityInSize, this.OpenSet.items.length);
 
-    while (lastStep.distance) {
+      // Pop first element from openSet
+      const { element } = this.OpenSet.dequeue();
 
-      // possibilities contains manhattan distances of each possible move
-      const possibilities = [];
+      // Move element to closeSet
+      this.closedSet.push(element);
 
-      // Get possible swaps
-      const zeroPosition = find(lastStep.puzzle, { value: 0 });
-      if (lastStep.direction !== 'up' && zeroPosition.y + 1 < this.size) possibilities.push(this.getDistance('down'));
-      if (lastStep.direction !== 'down' && zeroPosition.y) possibilities.push(this.getDistance('up'));
-      if (lastStep.direction !== 'left' && zeroPosition.x + 1 < this.size) possibilities.push(this.getDistance('right'));
-      if (lastStep.direction !== 'right' && zeroPosition.x) possibilities.push(this.getDistance('left'));
+      // Stop condition
+      if (element.distance === 0) {
+        solutionFound = true;
+        this.numberOfSwaps = element.cost;
+        this.complexityInTime = this.closedSet.length;
+        this.getFinalSet();
+        return;
+      }
 
-      // Find best solution
-      let solution = { ...possibilities[0] };
-      possibilities.forEach((el) => {
-        if (solution.distance > el.distance) solution = { ...el };
-      });
+      // Find data relative to element 0
+      const zero = find(element.puzzle, { value: 0 });
 
-      // Reset params following best solution
-      this.steps.push(solution);
-      lastStep = { ...solution };
-      console.log(`Step ${this.steps.length - 1}: ${lastStep.direction} [${lastStep.distance}]`);
-      this.printPuzzle(lastStep.puzzle);
-      console.log('');
+      // Handle moves
+      if (element.move !== 'up' && zero.y + 1 < this.size) this.swapPieces(element, 'down');
+      if (element.move !== 'down' && zero.y) this.swapPieces(element, 'up');
+      if (element.move !== 'left' && zero.x + 1 < this.size) this.swapPieces(element, 'right');
+      if (element.move !== 'right' && zero.x) this.swapPieces(element, 'left');
     }
   }
 }
