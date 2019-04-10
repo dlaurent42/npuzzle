@@ -65,7 +65,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "lint": "eslint \"src/**/*.{js,jsx}\"",
+    "lint": "eslint \"src/**/*.{js,jsx}\" \"scripts/nPuzzle*/**/*.{js,jsx}\"",
     "nPuzzle": "node scripts/nPuzzle",
     "nPuzzleBatch": "node scripts/nPuzzleBatch",
     "nPuzzleGenerator": "node scripts/nPuzzleGenerator"
