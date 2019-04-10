@@ -12,7 +12,6 @@ const {
   LINEARCONFLICT,
   EUCLIDEAN,
   MIXED,
-  UNIFORMCOST,
 } = require('../config/constants');
 
 // This class handles all data and methods relative to the puzzle
@@ -135,7 +134,7 @@ class Puzzle {
     let numberOfPermutations = 0;
 
     // Loop through all values
-    let valueA = 1;
+    let valueA = this.size % 2;
     while (valueA < (this.size ** 2) - 1) {
       let valueB = valueA + 1;
       while (valueB < this.size ** 2) {
@@ -162,30 +161,10 @@ class Puzzle {
     else {
       const row = find(this.puzzle, { value: 0 });
       const snailRow = find(this.snail, { value: 0 });
-      const numberOfRows = Math.abs(snailRow.y - row.y) + 1;
-      console.log(`Number of permutations: ${numberOfPermutations}`);
-      console.log(`Number of rows (from bottom): ${this.size - row.y}`);
-      console.log(`Number of rows (diff)       : ${numberOfRows}`);
-      this.solvable = (numberOfRows % 2 === 0 && numberOfPermutations % 2 === 1)
-                   || (numberOfRows % 2 === 1 && numberOfPermutations % 2 === 0);
-      if (this.solvable && this.size % 2 === 0) console.log('Normally solvable');
-      if (this.size % 2 === 0) this.solvable = false;
+      const numberOfRows = Math.abs(snailRow.y - row.y) + Math.abs(snailRow.x - row.x);
+      this.solvable = (numberOfRows % 2 !== numberOfPermutations % 2);
     }
   }
-
-  // nb = count_inversions(puzzle.tab, size)
-  // if size & 1:
-  //     if nb & 1 == 0:
-  //         return True
-  // else:
-  //     final_puzzle = create_final(size)
-  //     if nb & 1 and (size - puzzle.y) & 1 == 0:
-  //         return False if final_puzzle.y & 1 else True
-  //     elif nb & 1 == 0 and (size - puzzle.y) & 1:
-  //         return False if final_puzzle.y & 1 else True
-  //     else:
-  //         return True if final_puzzle.y & 1 else False
-  // return False
 
   printErrors() {
     if (this.errors.length === 0) console.log('No error occured during parsing.');
@@ -219,11 +198,12 @@ class Puzzle {
 
 class PuzzleSolver extends Puzzle {
 
-  constructor(heuristic, greedySearch) {
+  constructor(heuristic, uniformCost, greedySearch) {
     super();
 
     // Parameters
     this.heuristic = heuristic || MANHATTAN;
+    this.uniformCost = uniformCost || false;
     this.greedySearch = greedySearch || false;
 
     // Indicators
@@ -239,9 +219,10 @@ class PuzzleSolver extends Puzzle {
   }
 
   // Function to reset solver (used to starts a new resolution)
-  reset(heuristic, greedySearch) {
+  reset(heuristic, uniformCost, greedySearch) {
     // Parameters
     this.heuristic = heuristic || MANHATTAN;
+    this.uniformCost = uniformCost || false;
     this.greedySearch = greedySearch || false;
 
     // Indicators
@@ -332,7 +313,7 @@ class PuzzleSolver extends Puzzle {
         : dx + dy;
     });
     if (distance === 0) return distance;
-    if (this.heuristic === UNIFORMCOST && distance) return 1;
+    if (this.uniformCost && distance) return 1;
     if (this.heuristic === LINEARCONFLICT) return distance + this.getConflicts(puzzle);
     if (this.heuristic === MIXED) return distance + this.getMixedLevel(puzzle);
     return distance;

@@ -1,8 +1,7 @@
 const fs = require('fs');
 const PuzzleSolver = require('../../src/helpers/Puzzle');
-const { UNIFORMCOST } = require('../../src/config/constants');
 
-const solvePuzzle = ({ heuristic, greedy, filename }) => (
+const solvePuzzle = ({ heuristic, uniformCost, greedy, filename }) => ( // eslint-disable-line
 
   new Promise((resolve, reject) => {
 
@@ -15,7 +14,7 @@ const solvePuzzle = ({ heuristic, greedy, filename }) => (
     }
 
     // Get puzzle from file content
-    const Puzzle = new PuzzleSolver(heuristic, (greedy === 'Yes'));
+    const Puzzle = new PuzzleSolver(heuristic, uniformCost, greedy);
     Puzzle.getPuzzle(fileContent);
 
     // Check errors
@@ -30,12 +29,12 @@ const solvePuzzle = ({ heuristic, greedy, filename }) => (
     // Check if puzzle is solvable
     Puzzle.isPuzzleSolvable();
     if (!Puzzle.solvable) {
-      console.log('Puzzle is not solvable...');
+      console.log('Puzzle is not solvable.');
       return resolve();
     }
 
     // Display a warning following game situation
-    if (heuristic === UNIFORMCOST) console.log('Warning: you are trying to solve puzzle with brute-force method.');
+    if (Puzzle.uniformCost) console.log('Warning: you are trying to solve puzzle with brute-force method.');
     if (Puzzle.size > 4) console.log('Warning: puzzle is big so it can take time to solve.');
 
     // Solve puzzle
