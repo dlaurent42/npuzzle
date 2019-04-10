@@ -48,7 +48,7 @@ class Puzzle {
 
       // Split line into blocks
       let isPuzzleSize = false;
-      line.split('#')[0].trim().split(' ').forEach((block) => {
+      line.replace(/  +/g, ' ').trim().split('#')[0].trim().split(' ').forEach((block) => {
         const value = parseInt(block, 10);
 
         // Check if block contains only digits
@@ -64,7 +64,7 @@ class Puzzle {
         else if (this.size && (y > this.size || x >= this.size)) this.errors.push(`Line ${lineNumber}: an argument is outside the grid.`);
 
         // Check values regarding puzzle size
-        else if (this.size && value >= this.size * this.size) this.errors.push(`Line ${lineNumber}: ${value} is greater or equal to ${this.size * this.size}.`);
+        else if (this.size && value >= this.size ** 2) this.errors.push(`Line ${lineNumber}: ${value} is greater or equal to ${this.size ** 2}.`);
 
         // Check if value is already in puzzle structure
         else if (this.size && findIndex(this.puzzle, { value }) > -1) this.errors.push(`Line ${lineNumber}: ${value} is a dupplicate.`);
@@ -87,7 +87,7 @@ class Puzzle {
     });
 
     // Check number of tiles
-    if (!isEmpty(this.errors) && this.puzzle.length !== this.size * this.size) this.errors.push(`Wrong number of tiles (${this.puzzle.length}).`);
+    if (!isEmpty(this.errors) && this.puzzle.length !== this.size ** 2) this.errors.push(`Wrong number of tiles (${this.puzzle.length}).`);
   }
 
   getSnailPuzzle() {
@@ -108,7 +108,7 @@ class Puzzle {
       let col = 0;
       while (col < n) {
         x += direction;
-        this.snail.push({ x, y, value: (counter + 1 < this.size * this.size) ? counter + 1 : 0 });
+        this.snail.push({ x, y, value: (counter + 1 < this.size ** 2) ? counter + 1 : 0 });
         counter += 1;
         col += 1;
       }
@@ -117,7 +117,7 @@ class Puzzle {
       let line = 0;
       while (line < n - 1) {
         y += direction;
-        this.snail.push({ x, y, value: (counter + 1 < this.size * this.size) ? counter + 1 : 0 });
+        this.snail.push({ x, y, value: (counter + 1 < this.size ** 2) ? counter + 1 : 0 });
         counter += 1;
         line += 1;
       }
@@ -130,17 +130,17 @@ class Puzzle {
     }
   }
 
-  isPuzzleSolvable() {
+  getMixedLevel(puzzle) {
     // Number of permutations
     let numberOfPermutations = 0;
 
     // Loop through all values
     let valueA = 1;
-    while (valueA < this.size * this.size - 1) {
+    while (valueA < (this.size ** 2) - 1) {
       let valueB = valueA + 1;
-      while (valueB < this.size * this.size) {
-        const objA = find(this.puzzle, { value: valueA });
-        const objB = find(this.puzzle, { value: valueB });
+      while (valueB < this.size ** 2) {
+        const objA = find(puzzle, { value: valueA });
+        const objB = find(puzzle, { value: valueB });
         const retA = find(this.snail, { x: objA.x, y: objA.y });
         const retB = find(this.snail, { x: objB.x, y: objB.y });
         numberOfPermutations += (retB.value && (!retA.value || retA.value > retB.value));
@@ -148,6 +148,12 @@ class Puzzle {
       }
       valueA += 1;
     }
+    return numberOfPermutations;
+  }
+
+  isPuzzleSolvable() {
+    // Number of permutations
+    const numberOfPermutations = this.getMixedLevel(this.puzzle);
 
     // If N is odd, there is enough data to know if puzzle is solvable
     if (this.size % 2 === 1) this.solvable = numberOfPermutations % 2 === 0;
@@ -155,11 +161,31 @@ class Puzzle {
     // If N is even, position of 0 from bottom is needed
     else {
       const row = find(this.puzzle, { value: 0 });
-      const numberOfRows = this.size - row.y;
+      const snailRow = find(this.snail, { value: 0 });
+      const numberOfRows = Math.abs(snailRow.y - row.y) + 1;
+      console.log(`Number of permutations: ${numberOfPermutations}`);
+      console.log(`Number of rows (from bottom): ${this.size - row.y}`);
+      console.log(`Number of rows (diff)       : ${numberOfRows}`);
       this.solvable = (numberOfRows % 2 === 0 && numberOfPermutations % 2 === 1)
                    || (numberOfRows % 2 === 1 && numberOfPermutations % 2 === 0);
+      if (this.solvable && this.size % 2 === 0) console.log('Normally solvable');
+      if (this.size % 2 === 0) this.solvable = false;
     }
   }
+
+  // nb = count_inversions(puzzle.tab, size)
+  // if size & 1:
+  //     if nb & 1 == 0:
+  //         return True
+  // else:
+  //     final_puzzle = create_final(size)
+  //     if nb & 1 and (size - puzzle.y) & 1 == 0:
+  //         return False if final_puzzle.y & 1 else True
+  //     elif nb & 1 == 0 and (size - puzzle.y) & 1:
+  //         return False if final_puzzle.y & 1 else True
+  //     else:
+  //         return True if final_puzzle.y & 1 else False
+  // return False
 
   printErrors() {
     if (this.errors.length === 0) console.log('No error occured during parsing.');
@@ -292,27 +318,6 @@ class PuzzleSolver extends Puzzle {
       i += 1;
     }
     return conflicts;
-  }
-
-  getMixedLevel(puzzle) {
-    // Number of permutations
-    let numberOfPermutations = 0;
-
-    // Loop through all values
-    let valueA = 1;
-    while (valueA < this.size * this.size - 1) {
-      let valueB = valueA + 1;
-      while (valueB < this.size * this.size) {
-        const objA = find(puzzle, { value: valueA });
-        const objB = find(puzzle, { value: valueB });
-        const retA = find(this.snail, { x: objA.x, y: objA.y });
-        const retB = find(this.snail, { x: objB.x, y: objB.y });
-        numberOfPermutations += (retB.value && (!retA.value || retA.value > retB.value));
-        valueB += 1;
-      }
-      valueA += 1;
-    }
-    return numberOfPermutations;
   }
 
   // Function used to get distance following heuristic

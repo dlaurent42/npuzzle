@@ -66,7 +66,9 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
-    "npuzzle": "node scripts/npuzzle"
+    "nPuzzle": "node scripts/nPuzzle",
+    "nPuzzleTests": "node scripts/nPuzzleTests > scripts/nPuzzleTests/logs;",
+    "nPuzzleGenerator": "node scripts/generator"
   },
   "eslintConfig": {
     "extends": "react-app"
