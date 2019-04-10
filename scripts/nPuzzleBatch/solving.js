@@ -8,7 +8,7 @@ const {
   LINEARCONFLICT,
   MIXED,
   EUCLIDEAN,
-} = require('../../src/config/constants');
+} = require('../../src/config/constants').HEURISTICS;
 
 const solveThis = (heuristic, greedy, fileContent, file) => {
   // Get puzzle from file content
@@ -39,7 +39,7 @@ const solveThis = (heuristic, greedy, fileContent, file) => {
   Puzzle.solve();
 
   // Print results
-  fs.appendFileSync(file, `\nHeuristic :${Puzzle.heuristic}\n`, 'utf8');
+  fs.appendFileSync(file, `\nHeuristic: ${Puzzle.heuristic}\n`, 'utf8');
   if (Puzzle.greedySearch) fs.appendFileSync(file, 'greedy activated\n', 'utf8');
   else fs.appendFileSync(file, 'greedy deactivated\n', 'utf8');
   fs.appendFileSync(file, `Number of swaps: ${Puzzle.numberOfSwaps}\n`, 'utf8');

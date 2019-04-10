@@ -12,7 +12,7 @@ const {
   LINEARCONFLICT,
   EUCLIDEAN,
   MIXED,
-} = require('../config/constants');
+} = require('../config/constants').HEURISTICS;
 
 // This class handles all data and methods relative to the puzzle
 class Puzzle {

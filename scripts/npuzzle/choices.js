@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-const HEURISTICS = require('../../src/config/constants');
+const { HEURISTICS } = require('../../src/config/constants');
 
 const selectFile = userChoice => (
   new Promise((resolve, reject) => (
