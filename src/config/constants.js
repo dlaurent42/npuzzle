@@ -5,4 +5,12 @@ const HEURISTICS = {
   EUCLIDEAN: 'Euclidean',
 };
 
-module.exports = HEURISTICS;
+const ICONS = {
+  IMPORT: 'upload',
+  RUN: 'play',
+  CONFIG: 'sliders-h',
+  LEFT: 'arrow-circle-left',
+  RIGHT: 'arrow-circle-right',
+};
+
+module.exports = { HEURISTICS, ICONS };

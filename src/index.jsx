@@ -1,8 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faUpload,
+  faPlay,
+  faSlidersH,
+  faArrowCircleLeft,
+  faArrowCircleRight,
+} from '@fortawesome/free-solid-svg-icons';
+
+import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
+
+library.add(
+  faUpload,
+  faPlay,
+  faSlidersH,
+  faArrowCircleLeft,
+  faArrowCircleRight,
+);
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
