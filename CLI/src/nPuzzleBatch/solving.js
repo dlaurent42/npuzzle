@@ -1,14 +1,14 @@
 const fs = require('fs');
 const { exec } = require('child_process');
 
-const PuzzleSolver = require('../../src/helpers/Puzzle');
+const PuzzleSolver = require('../helpers/Puzzle');
 
 const {
   MANHATTAN,
   LINEARCONFLICT,
   MIXED,
   EUCLIDEAN,
-} = require('../../src/config/constants').HEURISTICS;
+} = require('../config/constants').HEURISTICS;
 
 const solveThis = (heuristic, greedy, fileContent, file) => {
   // Get puzzle from file content

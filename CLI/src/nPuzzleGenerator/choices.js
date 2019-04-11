@@ -28,7 +28,7 @@ const getUserChoices = () => (
           validate: (answer) => {
             if (answer.length < 1) return 'You must choose at least one size.';
             return true;
-          }
+          },
         },
         {
           type: 'checkbox',
@@ -38,8 +38,8 @@ const getUserChoices = () => (
           validate: (answer) => {
             if (answer.length < 1) return 'You must choose at least one number of iterations.';
             return true;
-          }
-        }
+          },
+        },
       ])
       .then(answers => resolve(answers))
       .catch(err => reject(err))

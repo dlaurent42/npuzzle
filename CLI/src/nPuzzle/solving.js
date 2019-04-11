@@ -1,5 +1,5 @@
 const fs = require('fs');
-const PuzzleSolver = require('../../src/helpers/Puzzle');
+const PuzzleSolver = require('../helpers/Puzzle');
 
 const solvePuzzle = ({ heuristic, uniformCost, greedy, filename }) => ( // eslint-disable-line
 

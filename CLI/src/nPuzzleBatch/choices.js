@@ -19,7 +19,7 @@ const getUserChoices = () => (
           validate: (answer) => {
             if (answer.length < 1) return 'You must choose at least one file.';
             return true;
-          }
+          },
         },
         {
           type: 'checkbox',
@@ -30,7 +30,7 @@ const getUserChoices = () => (
           validate: (answer) => {
             if (answer.length < 1) return 'You must choose at least one file.';
             return true;
-          }
+          },
         }])
       .then(answer => resolve(answer))
       .catch(err => reject(err))

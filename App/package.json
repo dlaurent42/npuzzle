@@ -32,7 +32,6 @@
     "html-webpack-plugin": "4.0.0-alpha.2",
     "i": "^0.3.6",
     "identity-obj-proxy": "3.0.0",
-    "inquirer": "^6.2.2",
     "jest": "23.6.0",
     "jest-pnp-resolver": "1.0.2",
     "jest-resolve": "23.6.0",
@@ -71,10 +70,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "lint": "eslint \"src/**/*.{js,jsx}\" \"scripts/nPuzzle*/**/*.{js,jsx}\"",
-    "nPuzzle": "node scripts/nPuzzle",
-    "nPuzzleBatch": "node scripts/nPuzzleBatch",
-    "nPuzzleGenerator": "node scripts/nPuzzleGenerator"
+    "lint": "eslint \"src/**/*.{js,jsx}\" \"scripts/nPuzzle*/**/*.{js,jsx}\""
   },
   "eslintConfig": {
     "extends": "react-app"
