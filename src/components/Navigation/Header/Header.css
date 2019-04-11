@@ -1,0 +1,47 @@
+.App-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  font-size: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.App-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.App-title, .App-menu {
+  padding: 20px 40px;
+}
+
+.App-menu .MenuButton {
+  margin: 20px;
+  opacity: 0.7;
+  -webkit-transition: opacity 0.5s;
+	transition: opacity 0.5s;
+}
+
+.App-menu .MenuButton:hover, .App-menu .MenuButton.Active {
+  opacity: 1;
+  cursor: pointer;
+  -webkit-transition: opacity 0.5s;
+	transition: opacity 0.5s;
+}
+
+@media (max-width: 500px) {
+  .App-header {
+    font-size: 25px;
+  }
+
+  .App-title, .App-menu {
+    padding: 10px 20px;
+  }
+
+  .App-menu .MenuButton {
+    margin: 10px;
+  }
+}

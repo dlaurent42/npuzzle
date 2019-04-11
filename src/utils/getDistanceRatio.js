@@ -1,5 +1,5 @@
-import find from 'lodash';
-import EUCLIDEAN from '../config/constants';
+import { find } from 'lodash';
+import { HEURISTICS } from '../config/constants';
 
 const getDistanceRatio = (obj, props) => {
 
@@ -10,12 +10,12 @@ const getDistanceRatio = (obj, props) => {
   const dMax = Math.abs(props.size - 1);
 
   // Assess distance of tile following heuristic
-  const distance = (props.heuristic === EUCLIDEAN)
+  const distance = (props.heuristic === HEURISTICS.EUCLIDEAN)
     ? (dx + dy + (Math.sqrt(2) - 2) * Math.min(dx, dy))
     : dx + dy;
 
   // Assess maximum distance of tile following heuristic
-  const maxDistance = (props.heuristic === EUCLIDEAN)
+  const maxDistance = (props.heuristic === HEURISTICS.EUCLIDEAN)
     ? (2 + (Math.sqrt(2) - 2)) * dMax
     : 2 * dMax;
 

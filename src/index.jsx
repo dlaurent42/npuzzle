@@ -6,7 +6,9 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faUpload,
   faPlay,
+  faRandom,
   faSlidersH,
+  faPalette,
   faArrowCircleLeft,
   faArrowCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +19,9 @@ import * as serviceWorker from './serviceWorker';
 library.add(
   faUpload,
   faPlay,
+  faRandom,
   faSlidersH,
+  faPalette,
   faArrowCircleLeft,
   faArrowCircleRight,
 );

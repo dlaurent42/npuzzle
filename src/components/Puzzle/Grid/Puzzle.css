@@ -3,6 +3,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, 25%);
   grid-auto-rows: 1fr;
+  padding: 40px;
+  background: rgb(255,255,255);
+  border-radius: 25px;
+  box-shadow: 10px 10px rgb(80, 84, 92)
 }
 
 .Grid::before {
@@ -20,5 +24,9 @@
 
 .Grid > * {
   background: rgba(0,0,0,0.1);
-  border: 3px white solid;
+  border: 5px white solid;
+  border-radius: 15px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }

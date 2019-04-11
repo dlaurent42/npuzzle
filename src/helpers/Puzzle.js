@@ -1,18 +1,13 @@
-const {
+import {
   cloneDeep,
   find,
   findIndex,
   isEmpty,
-} = require('lodash');
-const moment = require('moment');
+} from 'lodash';
+import moment from 'moment';
 
-const PriorityQueue = require('./PriorityQueue');
-const {
-  MANHATTAN,
-  LINEARCONFLICT,
-  EUCLIDEAN,
-  MIXED,
-} = require('../config/constants').HEURISTICS;
+import PriorityQueue from './PriorityQueue';
+import { HEURISTICS } from '../config/constants';
 
 // This class handles all data and methods relative to the puzzle
 class Puzzle {
@@ -202,7 +197,7 @@ class PuzzleSolver extends Puzzle {
     super();
 
     // Parameters
-    this.heuristic = heuristic || MANHATTAN;
+    this.heuristic = heuristic || HEURISTICS.MANHATTAN;
     this.uniformCost = uniformCost || false;
     this.greedySearch = greedySearch || false;
 
@@ -221,7 +216,7 @@ class PuzzleSolver extends Puzzle {
   // Function to reset solver (used to starts a new resolution)
   reset(heuristic, uniformCost, greedySearch) {
     // Parameters
-    this.heuristic = heuristic || MANHATTAN;
+    this.heuristic = heuristic || HEURISTICS.MANHATTAN;
     this.uniformCost = uniformCost || false;
     this.greedySearch = greedySearch || false;
 
@@ -308,14 +303,14 @@ class PuzzleSolver extends Puzzle {
       const snail = find(this.snail, { value: el.value });
       const dx = Math.abs(snail.x - el.x);
       const dy = Math.abs(snail.y - el.y);
-      distance += (this.heuristic === EUCLIDEAN)
+      distance += (this.heuristic === HEURISTICS.EUCLIDEAN)
         ? (dx + dy + (Math.sqrt(2) - 2) * Math.min(dx, dy))
         : dx + dy;
     });
     if (distance === 0) return distance;
     if (this.uniformCost && distance) return 1;
-    if (this.heuristic === LINEARCONFLICT) return distance + this.getConflicts(puzzle);
-    if (this.heuristic === MIXED) return distance + this.getMixedLevel(puzzle);
+    if (this.heuristic === HEURISTICS.LINEARCONFLICT) return distance + this.getConflicts(puzzle);
+    if (this.heuristic === HEURISTICS.MIXED) return distance + this.getMixedLevel(puzzle);
     return distance;
   }
 
@@ -411,4 +406,4 @@ class PuzzleSolver extends Puzzle {
   }
 }
 
-module.exports = PuzzleSolver;
+export default PuzzleSolver;

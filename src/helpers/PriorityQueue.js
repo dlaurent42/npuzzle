@@ -43,4 +43,4 @@ class PriorityQueue {
   }
 }
 
-module.exports = PriorityQueue;
+export default PriorityQueue;
