@@ -41,7 +41,7 @@ const solvePuzzle = ({ heuristic, uniformCost, greedy, filename }) => ( // eslin
     Puzzle.solve();
 
     // Print results
-    console.log(`\nHeuristic :${Puzzle.heuristic}`);
+    console.log(`\nHeuristic: ${Puzzle.heuristic}`);
     if (Puzzle.greedySearch) console.log('greedy activated\n');
     else console.log('greedy deactivated\n');
     console.log(`Number of swaps: ${Puzzle.numberOfSwaps}`);
