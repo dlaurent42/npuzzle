@@ -19,6 +19,32 @@
   min-width: 100vw;
 }
 
+.App-modal {
+  background-color: white;
+  padding: 20px 20px;
+  border-radius: 30px 0px 30px 30px;
+  position: absolute;
+  z-index: 99;
+  right: 0;
+  top: 0;
+  margin-top: 125px;
+  margin-right: 40px;
+}
+
+.App-modal-show {
+  height: auto;
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: height 1s, opacity 1s;
+	transition: height 1s, opacity 1s;
+}
+
+.App-modal-hide {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
 .App-link,
 .App-link:active,
 .App-link:visited {
@@ -29,13 +55,4 @@
 
 .App-link:hover {
   color: white;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

@@ -1,0 +1,58 @@
+.Inp {
+  position: relative;
+  margin: auto;
+  width: 150px;
+}
+.Inp .Label {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  font-size: 16px;
+  color: #282c34;
+  font-weight: 500;
+  transform-origin: 0 0;
+  transition: all 0.2s ease;
+}
+.Inp .Border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: #282c34;
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  transition: all 0.15s ease;
+}
+.Inp input {
+  -webkit-appearance: none;
+  width: 100%;
+  border: 0;
+  font-family: inherit;
+  padding: 12px 0;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  background: none;
+  border-radius: 0;
+  color: #282c34;
+  transition: all 0.15s ease;
+}
+.Inp input:hover {
+  background: rgba(34,50,84,0.03);
+}
+.Inp input:not(:placeholder-shown) + span {
+  color: #5a667f;
+  transform: translateY(-26px) scale(0.75);
+}
+.Inp input:focus {
+  background: none;
+  outline: none;
+}
+.Inp input:focus + span {
+  color: #282c34;
+  transform: translateY(-26px) scale(0.75);
+}
+.Inp input:focus + span + .Border {
+  transform: scaleX(1);
+}

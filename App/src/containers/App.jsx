@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // Components
 import Header from '../components/Navigation/Header/Header';
 import Footer from '../components/Navigation/Footer/Footer';
+import ColorPicker from '../components/Puzzle/Colors/ColorPicker';
 import Shuffle from '../components/Puzzle/Shuffle/Shuffle';
 import ImportFile from '../components/Puzzle/ImportFile/ImportFile';
 import Settings from '../components/Puzzle/Settings/Settings';
@@ -24,6 +25,7 @@ class App extends Component {
 
     // Puzzle relative
     Puzzle: new PuzzleSolver(),
+    puzzle: [],
     color: COLORS.GAME,
 
 
@@ -41,10 +43,12 @@ class App extends Component {
       this.state.Puzzle.getPuzzle(fileContent);
       this.state.Puzzle.getSnailPuzzle();
       this.state.Puzzle.isPuzzleSolvable();
-      this.forceUpdate();
+      const puzzle = [...this.state.Puzzle.puzzle];
+      this.setState(() => ({ puzzle }));
     }
   }
 
+  // Display handlers
   showHandler = (displayImport, displaySettings, displayShuffle, displayColorPicker) => {
     this.setState({
       displayImport,
@@ -54,7 +58,6 @@ class App extends Component {
     });
   }
 
-  // Display handlers
   showShuffleOptions = () => {
     if (this.state.displayShuffle) this.showHandler(false, false, false, false);
     else this.showHandler(false, false, true, false);
@@ -75,6 +78,19 @@ class App extends Component {
     else this.showHandler(false, false, false, true);
   }
 
+  // Actions handlers
+  handleShuffle = (size, numberOfIterations) => {
+    if (size >= 3 && size <= 5 && numberOfIterations >= 0 && numberOfIterations <= 10000) {
+      this.state.Puzzle.reset(this.state.Puzzle.heuristic);
+      const fileContent = getShuffledPuzzle(size, numberOfIterations);
+      this.state.Puzzle.getPuzzle(fileContent);
+      this.state.Puzzle.getSnailPuzzle();
+      this.state.Puzzle.isPuzzleSolvable();
+      const puzzle = [...this.state.Puzzle.puzzle];
+      this.setState(prevState => ({ puzzle, displayShuffle: !prevState.displayShuffle }));
+    }
+  }
+
   // Rendering
   render() {
     return (
@@ -89,14 +105,15 @@ class App extends Component {
           showSettings={this.showSettings}
           showColorPicker={this.showColorPicker}
         />
+        <Shuffle show={this.state.displayShuffle} onValidate={this.handleShuffle} />
+        <ColorPicker show={this.state.displayColorPicker} />
+        <ImportFile show={this.state.displayImport} />
+        <Settings show={this.state.displaySettings} />
         <div className="App-container">
-          <Shuffle show={this.state.displayShuffle} />
-          <ImportFile show={this.state.displayImport} />
-          <Settings show={this.state.displaySettings} />
           <Puzzle
             color={this.state.color}
             size={this.state.Puzzle.size}
-            puzzle={this.state.Puzzle.puzzle}
+            puzzle={this.state.puzzle}
             snail={this.state.Puzzle.snail}
             heuristic={this.state.Puzzle.heuristic}
             uniformCost={this.state.Puzzle.uniformCost}
