@@ -15,7 +15,9 @@
 
 .App-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   min-width: 100vw;
 }
 
@@ -43,6 +45,21 @@
   height: 0;
   opacity: 0;
   visibility: hidden; 
+}
+
+.App-mask {
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(40, 44, 52);
+  background-color: rgba(40, 44, 52, 0.98);
 }
 
 .App-link,

@@ -8,9 +8,9 @@ const header = props => (
   <div className="App-header">
     <div className="App-title">N-Puzzle</div>
     <div className="App-menu">
-      <Icon className="Icon" icon={ICONS.RANDOM} onClick={props.showShuffleOptions} active={props.displayShuffle} />
-      <Icon className="Icon" icon={ICONS.CONFIG} onClick={props.showSettings} active={props.displaySettings} />
-      <Icon className="Icon" icon={ICONS.COLORPICKER} onClick={props.showColorPicker} active={props.displayColorPicker} />
+      <Icon classNames={['Icon']} icon={ICONS.RANDOM} onClick={props.showShuffleOptions} active={props.displayShuffle} />
+      <Icon classNames={['Icon']} icon={ICONS.CONFIG} onClick={props.showSettings} active={props.displaySettings} />
+      <Icon classNames={['Icon']} icon={ICONS.COLORPICKER} onClick={props.showColorPicker} active={props.displayColorPicker} />
     </div>
   </div>
 );

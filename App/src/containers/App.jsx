@@ -3,10 +3,12 @@ import React, { Component } from 'react';
 // Components
 import Header from '../components/Navigation/Header/Header';
 import Footer from '../components/Navigation/Footer/Footer';
+import Controls from '../components/Puzzle/Controls/Controls';
 import ColorPicker from '../components/Puzzle/Colors/ColorPicker';
 import Shuffle from '../components/Puzzle/Shuffle/Shuffle';
 import Settings from '../components/Puzzle/Settings/Settings';
 import PuzzleGrid from '../components/Puzzle/Grid/Puzzle';
+import Spinner from '../components/UI/Spinner/Spinner';
 
 // Utils
 import getShuffledPuzzle from '../utils/getShuffledPuzzle';
@@ -29,6 +31,8 @@ class App extends Component {
     heuristic: HEURISTICS.MANHATTAN,
     greedy: false,
     solved: false,
+    currentStep: 0,
+    solving: false,
 
     // Display window parameters
     displaySettings: false,
@@ -42,7 +46,6 @@ class App extends Component {
 
   // Lifecyle Hook
   componentDidMount() {
-    console.dir('componentDidMount');
     if (this.state.Puzzle.puzzle.length === 0) {
       const fileContent = getShuffledPuzzle(3, 100);
       this.state.Puzzle.getPuzzle(fileContent);
@@ -97,6 +100,8 @@ class App extends Component {
     this.setState(prevState => ({
       Puzzle: NewPuzzle,
       puzzle: NewPuzzle.puzzle,
+      solved: false,
+      currentStep: 0,
       displayShuffle: !prevState.displayShuffle,
     }));
     return true;
@@ -125,9 +130,18 @@ class App extends Component {
   handleSettings = (e) => {
     e.preventDefault();
     const { greedy, heuristic, Puzzle } = this.state;
-    if (greedy === Puzzle.greedySearch && heuristic === Puzzle.heuristic) return false;
+    if (greedy === Puzzle.greedySearch && heuristic === Puzzle.heuristic) {
+      console.dir('returning false');
+      return false;
+    }
     Puzzle.reset(heuristic, greedy);
-    if (this.state.solved) this.setState(prevState => ({ solved: !prevState.solved }));
+    if (this.state.solved) {
+      this.setState(prevState => ({
+        solved: !prevState.solved,
+        currentStep: 0,
+        displaySettings: false
+      }));
+    } else this.setState({ displaySettings: false });
     return true;
   }
 
@@ -143,10 +157,33 @@ class App extends Component {
     }
   }
 
+  // Action handlers for controls
+  handleSolvePuzzle = () => {
+    // this.setState({ solving: true }, this.state.Puzzle.solve());
+    this.setState({ solving: true }, () => { setTimeout(() => {}, 10000); });
+    // this.setState({ solved: true, solving: false });
+  }
+
+  handlePreviousStep = () => {
+    this.setState(prevState => ({
+      currentStep: prevState.currentStep - 1,
+      puzzle: prevState.Puzzle.finalSet[prevState.currentStep - 1].puzzle,
+    }));
+  }
+
+  handleNextStep = () => {
+    this.setState(prevState => ({
+      currentStep: prevState.currentStep + 1,
+      puzzle: prevState.Puzzle.finalSet[prevState.currentStep + 1].puzzle,
+    }));
+  }
+
   // Rendering
   render() {
+    const spinner = (this.state.solving) ? <div className="App-mask"><Spinner>Solving...</Spinner></div> : null;
     return (
       <div className="App">
+        {spinner}
         <Header
           displaySettings={this.state.displaySettings}
           displayShuffle={this.state.displayShuffle}
@@ -183,6 +220,14 @@ class App extends Component {
             puzzle={this.state.puzzle}
             snail={this.state.Puzzle.snail}
             heuristic={this.state.Puzzle.heuristic}
+          />
+          <Controls
+            currentStep={this.state.currentStep}
+            puzzleSolved={this.state.solved}
+            finalSet={this.state.Puzzle.finalSet}
+            handleSolve={this.handleSolvePuzzle}
+            handlePrevious={this.handlePreviousStep}
+            handleNext={this.handleNextStep}
           />
         </div>
         <Footer />

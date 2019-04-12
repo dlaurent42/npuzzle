@@ -4,20 +4,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Icon.css';
 
 const icon = (props) => {
-  const classes = (props.active) ? [props.className, 'Active'] : [props.className];
-  return <FontAwesomeIcon className={classes.join(' ')} icon={props.icon} onClick={props.onClick} />;
+  if (props.active) props.classNames.push('Active');
+  return <FontAwesomeIcon className={props.classNames.join(' ')} icon={props.icon} onClick={props.onClick} />;
 };
 
 icon.propTypes = {
   icon: PropTypes.string.isRequired,
   onClick: PropTypes.func,
-  className: PropTypes.string,
+  classNames: PropTypes.arrayOf(PropTypes.string),
   active: PropTypes.bool,
 };
 
 icon.defaultProps = {
   onClick: () => {},
-  className: '',
+  classNames: [],
   active: false,
 };
 
