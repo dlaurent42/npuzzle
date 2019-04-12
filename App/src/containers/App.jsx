@@ -5,9 +5,8 @@ import Header from '../components/Navigation/Header/Header';
 import Footer from '../components/Navigation/Footer/Footer';
 import ColorPicker from '../components/Puzzle/Colors/ColorPicker';
 import Shuffle from '../components/Puzzle/Shuffle/Shuffle';
-import ImportFile from '../components/Puzzle/ImportFile/ImportFile';
 import Settings from '../components/Puzzle/Settings/Settings';
-import Puzzle from '../components/Puzzle/Grid/Puzzle';
+import PuzzleGrid from '../components/Puzzle/Grid/Puzzle';
 
 // Utils
 import getShuffledPuzzle from '../utils/getShuffledPuzzle';
@@ -17,7 +16,7 @@ import PuzzleSolver from '../helpers/Puzzle';
 
 // Others
 import './App.css';
-import { COLORS } from '../config/constants';
+import { COLORS, HEURISTICS } from '../config/constants';
 
 class App extends Component {
 
@@ -27,9 +26,11 @@ class App extends Component {
     Puzzle: new PuzzleSolver(),
     puzzle: [],
     color: COLORS.GAME,
+    heuristic: HEURISTICS.MANHATTAN,
+    greedy: false,
+    solved: false,
 
     // Display window parameters
-    displayImport: false,
     displaySettings: false,
     displayShuffle: false,
     displayColorPicker: false,
@@ -41,6 +42,7 @@ class App extends Component {
 
   // Lifecyle Hook
   componentDidMount() {
+    console.dir('componentDidMount');
     if (this.state.Puzzle.puzzle.length === 0) {
       const fileContent = getShuffledPuzzle(3, 100);
       this.state.Puzzle.getPuzzle(fileContent);
@@ -52,9 +54,8 @@ class App extends Component {
   }
 
   // Display handlers
-  showHandler = (displayImport, displaySettings, displayShuffle, displayColorPicker) => {
+  showHandler = (displaySettings, displayShuffle, displayColorPicker) => {
     this.setState({
-      displayImport,
       displaySettings,
       displayShuffle,
       displayColorPicker,
@@ -62,35 +63,34 @@ class App extends Component {
   }
 
   showShuffleOptions = () => {
-    if (this.state.displayShuffle) this.showHandler(false, false, false, false);
-    else this.showHandler(false, false, true, false);
-  }
-
-  showImportOptions = () => {
-    if (this.state.displayImport) this.showHandler(false, false, false, false);
-    else this.showHandler(true, false, false, false);
+    if (this.state.displayShuffle) this.showHandler(false, false, false);
+    else this.showHandler(false, true, false);
   }
 
   showSettings = () => {
-    if (this.state.displaySettings) this.showHandler(false, false, false, false);
-    else this.showHandler(false, true, false, false);
+    if (this.state.displaySettings) {
+      this.showHandler(false, false, false);
+      this.setState(prevState => ({
+        heuristic: prevState.Puzzle.heuristic,
+        greedy: prevState.Puzzle.greedySearch,
+      }));
+    } else this.showHandler(true, false, false);
   }
 
   showColorPicker = () => {
-    if (this.state.displayColorPicker) this.showHandler(false, false, false, false);
-    else this.showHandler(false, false, false, true);
+    if (this.state.displayColorPicker) this.showHandler(false, false, false);
+    else this.showHandler(false, false, true);
   }
 
-  // Actions handlers
+  // Action handlers for shuffle
   handleShuffle = (e) => {
     e.preventDefault();
     const { shuffleSize, shuffleIterations } = this.state;
     if (!/^\d+$/.test(shuffleSize) || !/^\d+$/.test(shuffleIterations)) return false;
     if (shuffleSize < 3 || shuffleSize > 5) return false;
     if (shuffleIterations < 0 || shuffleSize > 10000) return false;
-    this.state.Puzzle.reset(this.state.Puzzle.heuristic);
     const fileContent = getShuffledPuzzle(shuffleSize, shuffleIterations);
-    const NewPuzzle = new PuzzleSolver();
+    const NewPuzzle = new PuzzleSolver(this.state.Puzzle.heuristic, this.state.Puzzle.greedySearch);
     NewPuzzle.getPuzzle(fileContent);
     NewPuzzle.getSnailPuzzle();
     NewPuzzle.isPuzzleSolvable();
@@ -98,8 +98,6 @@ class App extends Component {
       Puzzle: NewPuzzle,
       puzzle: NewPuzzle.puzzle,
       displayShuffle: !prevState.displayShuffle,
-      shuffleSize: '',
-      shuffleIterations: '',
     }));
     return true;
   }
@@ -116,10 +114,32 @@ class App extends Component {
     else if (shuffleIterations === '') this.setState({ shuffleIterations: '' });
   }
 
+  // Action handler for color picker
   handleColorPicker = (e) => {
-    e.preventDefault();
     if (this.state.color !== COLORS[e.target.value]) {
       this.setState({ color: COLORS[e.target.value], displayColorPicker: false });
+    }
+  }
+
+  // Action handlers for settings
+  handleSettings = (e) => {
+    e.preventDefault();
+    const { greedy, heuristic, Puzzle } = this.state;
+    if (greedy === Puzzle.greedySearch && heuristic === Puzzle.heuristic) return false;
+    Puzzle.reset(heuristic, greedy);
+    if (this.state.solved) this.setState(prevState => ({ solved: !prevState.solved }));
+    return true;
+  }
+
+  handleGreedyChange = (e) => {
+    e.preventDefault();
+    this.setState(prevState => ({ greedy: !prevState.greedy }));
+  }
+
+  handleHeuristicChange = (e) => {
+    e.preventDefault();
+    if (e.target.value !== this.state.heuristic) {
+      this.setState({ heuristic: HEURISTICS[e.target.value] });
     }
   }
 
@@ -128,12 +148,10 @@ class App extends Component {
     return (
       <div className="App">
         <Header
-          displayImport={this.state.displayImport}
           displaySettings={this.state.displaySettings}
           displayShuffle={this.state.displayShuffle}
           displayColorPicker={this.state.displayColorPicker}
           showShuffleOptions={this.showShuffleOptions}
-          showImportOptions={this.showImportOptions}
           showSettings={this.showSettings}
           showColorPicker={this.showColorPicker}
         />
@@ -148,18 +166,23 @@ class App extends Component {
         <ColorPicker
           show={this.state.displayColorPicker}
           color={this.state.color}
-          onClick={this.handleColorPicker}
+          onChange={this.handleColorPicker}
         />
-        <ImportFile show={this.state.displayImport} />
-        <Settings show={this.state.displaySettings} />
+        <Settings
+          show={this.state.displaySettings}
+          heuristic={this.state.heuristic}
+          greedy={this.state.greedy}
+          onValidate={this.handleSettings}
+          onGreedyChange={this.handleGreedyChange}
+          onHeuristicChange={this.handleHeuristicChange}
+        />
         <div className="App-container">
-          <Puzzle
+          <PuzzleGrid
             color={this.state.color}
             size={this.state.Puzzle.size}
             puzzle={this.state.puzzle}
             snail={this.state.Puzzle.snail}
             heuristic={this.state.Puzzle.heuristic}
-            uniformCost={this.state.Puzzle.uniformCost}
           />
         </div>
         <Footer />

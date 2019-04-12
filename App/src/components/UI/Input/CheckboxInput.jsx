@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './RadioInput.css';
+import './CheckboxInput.css';
 
 const input = (props) => {
   const checked = (props.checked) ? { checked: true } : {};
   return (
-    <label htmlFor={props.value} className="Radio-input">
+    <label htmlFor={props.value} className="Checkbox-input">
       <input
         id={props.value}
-        type="radio"
+        type="checkbox"
         name={props.name}
         value={props.value}
         onChange={props.onChange}

@@ -20,7 +20,6 @@ const getDistanceRatio = (obj, props) => {
     : 2 * dMax;
 
   // Return distance ratio
-  if (props.uniformCost) return distance > 0;
   return distance / maxDistance;
 };
 

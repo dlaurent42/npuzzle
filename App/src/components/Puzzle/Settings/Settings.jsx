@@ -1,41 +1,72 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { HEURISTICS } from '../../../config/constants';
+import { ICONS, HEURISTICS } from '../../../config/constants';
+import Icon from '../../UI/Icon/Icon';
+import Form from '../../UI/Form/Form';
+import Button from '../../UI/Button/Button';
+import RadioButton from '../../UI/Input/RadioInput';
+import CheckboxButton from '../../UI/Input/CheckboxInput';
 import './Settings.css';
-
-// https://freefrontend.com/css-select-boxes/
-// https://codepen.io/Aoyue/pen/rLExYX?editors=1100
 
 const settings = (props) => {
 
-  // Check if settings have to be shown
-  if (!props.show) return (<div />);
+  // Create heuristics array
+  const heuristics = [];
+  Object.entries(HEURISTICS).forEach((heuristic) => {
 
-  // Prepare heuristics list
-  const options = [];
-  Object.values(HEURISTICS).forEach((heuristic) => {
-    options.push(
-      <label className="option" htmlFor="inp" key={heuristic}>
-        <input type="radio" name="option" />
-        <span className="title animated fadeIn">{heuristic}</span>
-      </label>
+    // Check if option is checked
+    const box = (props.heuristic === heuristic[1])
+      ? <Icon icon={ICONS.CHECKBOX} active />
+      : <Icon icon={ICONS.EMPTYCHECKBOX} active />;
+
+    // Push heuristic to list
+    heuristics.push(
+      <RadioButton
+        key={heuristic[0]}
+        value={heuristic[0]}
+        name="heuristics"
+        onChange={props.onHeuristicChange}
+      >
+        {heuristic[1]}
+        {box}
+      </RadioButton>
     );
   });
 
-  // Return settings
-  return (
-    <div className="select animated zoomIn">
-      <input type="radio" name="option" />
-      <i className="toggle icon icon-arrow-down" />
-      <i className="toggle icon icon-arrow-up" />
-      <span className="placeholder">Choose...</span>
-      {options}
+  // Get switch button
+  const box = (props.greedy)
+    ? <Icon icon={ICONS.CHECKBOX} active />
+    : <Icon icon={ICONS.EMPTYCHECKBOX} active />;
+  const greedy = (
+    <div className="Greedy">
+      <CheckboxButton
+        value="greedy"
+        name="greedy"
+        onChange={props.onGreedyChange}
+      >
+        Greedy Search
+        {box}
+      </CheckboxButton>
     </div>
+  );
+  return (
+    <Form show={props.show} classNames={['Settings']}>
+      {heuristics}
+      {greedy}
+      <Button btnAttr="Validate" onClick={props.onValidate}>
+        <Icon active icon={ICONS.VALIDATE} />
+      </Button>
+    </Form>
   );
 };
 
 settings.propTypes = {
   show: PropTypes.bool.isRequired,
+  heuristic: PropTypes.string.isRequired,
+  greedy: PropTypes.bool.isRequired,
+  onValidate: PropTypes.func.isRequired,
+  onGreedyChange: PropTypes.func.isRequired,
+  onHeuristicChange: PropTypes.func.isRequired,
 };
 
 export default settings;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './Form.css';
 
 const form = (props) => {
-  const classes = ['App-modal', 'App-form'];
+  const classes = ['App-modal', 'App-form', ...props.classNames];
   if (props.show) classes.push('App-modal-show');
   else classes.push('App-modal-hide');
   return (
@@ -16,10 +16,12 @@ const form = (props) => {
 
 form.propTypes = {
   show: PropTypes.bool,
+  classNames: PropTypes.arrayOf(PropTypes.string),
 };
 
 form.defaultProps = {
   show: false,
+  classNames: [],
 };
 
 export default form;

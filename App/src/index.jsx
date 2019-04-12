@@ -13,6 +13,8 @@ import {
   faArrowCircleRight,
   faCheck,
   faTimes,
+  faSquare,
+  faCheckSquare,
 } from '@fortawesome/free-solid-svg-icons';
 
 import App from './containers/App';
@@ -28,6 +30,8 @@ library.add(
   faArrowCircleRight,
   faCheck,
   faTimes,
+  faSquare,
+  faCheckSquare,
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));

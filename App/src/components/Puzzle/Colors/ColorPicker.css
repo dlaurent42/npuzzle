@@ -1,15 +1,53 @@
 .Color-picker {
   display: flex;
   flex-direction: column;
+  line-height: 40px;
 }
 
-.Color-picker .Button {
+.Color-picker .Radio-input {
   font-size: 20px;
+  color: rgb(34,50,84);
+  padding: 10px;
+  opacity: 0.85;
+  -webkit-transition: opacity 0.5s;
+	transition: opacity 0.5s;
+}
+
+.Color-picker .Radio-input:hover {
+  background: rgba(34,50,84,0.1);
+  border-radius: 20px 0px 20px 20px;
+  opacity: 1;
+  -webkit-transition: opacity 0.5s;
+	transition: opacity 0.5s;
 }
 
 .Color-picker .Color-gradient {
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background-image: linear-gradient(to right, red , yellow);
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  -webkit-transition: width 0.5s ease-in;
+	transition: width 0.5s ease-in;
+}
+
+.Color-picker label:hover .Color-gradient {
+  width: 80px;
+  -webkit-transition: width 0.5s ease-out;
+	transition: width 0.5s ease-out;
+}
+
+.Color-picker label {
+  justify-content: center;
+}
+
+div#BASIC {
+  background-image: linear-gradient(to right, rgb(255, 0, 0) , rgb(0, 255, 0));
+}
+div#BLUE {
+  background-image: linear-gradient(to right, rgb(255, 216, 155) , rgb(25, 84, 123));
+}
+div#GAME {
+  background-image: linear-gradient(to right, rgb(255, 153, 102) , rgb(255, 94, 98));
+}
+div#BLOODY {
+  background-image: linear-gradient(to right, rgb(255, 81, 47) , rgb(221, 45, 118));
 }

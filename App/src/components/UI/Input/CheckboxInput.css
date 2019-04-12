@@ -1,9 +1,9 @@
-.Radio-input {
+.Checkbox-input {
   cursor: pointer;
   display: flex;
   min-width: 100px;
   justify-content: space-between;
 }
-.Radio-input input {
+.Checkbox-input input {
   display: none;
 }

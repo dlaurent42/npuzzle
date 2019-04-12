@@ -1,7 +1,7 @@
 const HEURISTICS = {
   MANHATTAN: 'Manhattan',
-  LINEARCONFLICT: 'Manhattan + Linear Conflict',
-  MIXED: 'Manhattan + Mixed Level',
+  LINEARCONFLICT: 'Linear Conflict',
+  MIXED: 'Mixing Level',
   EUCLIDEAN: 'Euclidean',
 };
 
@@ -15,6 +15,8 @@ const ICONS = {
   RIGHT: 'arrow-circle-right',
   VALIDATE: 'check',
   CANCEL: 'times',
+  CHECKBOX: 'check-square',
+  EMPTYCHECKBOX: 'square',
 };
 
 const COLORS = {

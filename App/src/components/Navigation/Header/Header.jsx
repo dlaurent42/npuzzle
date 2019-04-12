@@ -10,19 +10,16 @@ const header = props => (
     <div className="App-menu">
       <Icon className="Icon" icon={ICONS.RANDOM} onClick={props.showShuffleOptions} active={props.displayShuffle} />
       <Icon className="Icon" icon={ICONS.CONFIG} onClick={props.showSettings} active={props.displaySettings} />
-      <Icon className="Icon" icon={ICONS.IMPORT} onClick={props.showImportOptions} active={props.displayImport} />
       <Icon className="Icon" icon={ICONS.COLORPICKER} onClick={props.showColorPicker} active={props.displayColorPicker} />
     </div>
   </div>
 );
 
 header.propTypes = {
-  displayImport: PropTypes.bool.isRequired,
   displaySettings: PropTypes.bool.isRequired,
   displayShuffle: PropTypes.bool.isRequired,
   displayColorPicker: PropTypes.bool.isRequired,
   showShuffleOptions: PropTypes.func.isRequired,
-  showImportOptions: PropTypes.func.isRequired,
   showSettings: PropTypes.func.isRequired,
   showColorPicker: PropTypes.func.isRequired,
 };

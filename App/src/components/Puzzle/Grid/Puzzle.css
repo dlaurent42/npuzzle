@@ -20,6 +20,8 @@
 .Grid > *:first-child {
   grid-row: 1 / 1;
   grid-column: 1 / 1;
+  -webkit-transition: background-color 0.5s;
+	transition: background-color 0.5s;
 }
 
 .Grid > * {

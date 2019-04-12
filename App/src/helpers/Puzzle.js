@@ -193,12 +193,11 @@ class Puzzle {
 
 class PuzzleSolver extends Puzzle {
 
-  constructor(heuristic, uniformCost, greedySearch) {
+  constructor(heuristic, greedySearch) {
     super();
 
     // Parameters
     this.heuristic = heuristic || HEURISTICS.MANHATTAN;
-    this.uniformCost = uniformCost || false;
     this.greedySearch = greedySearch || false;
 
     // Indicators
@@ -214,10 +213,9 @@ class PuzzleSolver extends Puzzle {
   }
 
   // Function to reset solver (used to starts a new resolution)
-  reset(heuristic, uniformCost, greedySearch) {
+  reset(heuristic, greedySearch) {
     // Parameters
     this.heuristic = heuristic || HEURISTICS.MANHATTAN;
-    this.uniformCost = uniformCost || false;
     this.greedySearch = greedySearch || false;
 
     // Indicators
@@ -307,8 +305,6 @@ class PuzzleSolver extends Puzzle {
         ? (dx + dy + (Math.sqrt(2) - 2) * Math.min(dx, dy))
         : dx + dy;
     });
-    if (distance === 0) return distance;
-    if (this.uniformCost && distance) return 1;
     if (this.heuristic === HEURISTICS.LINEARCONFLICT) return distance + this.getConflicts(puzzle);
     if (this.heuristic === HEURISTICS.MIXED) return distance + this.getMixedLevel(puzzle);
     return distance;

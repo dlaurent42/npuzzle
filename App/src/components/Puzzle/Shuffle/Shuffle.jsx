@@ -8,7 +8,7 @@ import { ICONS } from '../../../config/constants';
 import './Shuffle.css';
 
 const shuffle = props => (
-  <Form show={props.show}>
+  <Form show={props.show} classNames={['Shuffle']}>
     <TextInput label="Size [3, 4, 5]" value={props.shuffleSize} onChange={props.onSizeChange} />
     <TextInput label="Iterations [0...10000]" value={props.shuffleIterations} onChange={props.onIterationsChange} />
     <Button btnAttr="Validate" onClick={props.onValidate}>
