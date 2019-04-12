@@ -1,0 +1,15 @@
+.Color-picker {
+  display: flex;
+  flex-direction: column;
+}
+
+.Color-picker .Button {
+  font-size: 20px;
+}
+
+.Color-picker .Color-gradient {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-image: linear-gradient(to right, red , yellow);
+}

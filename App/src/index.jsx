@@ -11,6 +11,8 @@ import {
   faPalette,
   faArrowCircleLeft,
   faArrowCircleRight,
+  faCheck,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 import App from './containers/App';
@@ -24,6 +26,8 @@ library.add(
   faPalette,
   faArrowCircleLeft,
   faArrowCircleRight,
+  faCheck,
+  faTimes,
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));

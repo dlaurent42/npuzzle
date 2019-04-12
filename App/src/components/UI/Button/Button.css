@@ -1,0 +1,26 @@
+.Button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 10px;
+  margin: 10px;
+  font-weight: bold;
+}
+
+.Button:first-of-type {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.Validate {
+  color: #28E377;
+  color: #28B162;
+  color: #66738C;
+}
+
+.Cancel {
+  color: #FB2441;
+  color: #E32842;
+}

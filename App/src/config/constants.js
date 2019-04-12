@@ -13,6 +13,8 @@ const ICONS = {
   COLORPICKER: 'palette',
   LEFT: 'arrow-circle-left',
   RIGHT: 'arrow-circle-right',
+  VALIDATE: 'check',
+  CANCEL: 'times',
 };
 
 const COLORS = {

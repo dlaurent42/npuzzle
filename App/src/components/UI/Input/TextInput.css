@@ -1,9 +1,9 @@
-.Inp {
+.Text-input {
   position: relative;
   margin: auto;
   width: 150px;
 }
-.Inp .Label {
+.Text-input .Label {
   position: absolute;
   top: 16px;
   left: 0;
@@ -13,7 +13,7 @@
   transform-origin: 0 0;
   transition: all 0.2s ease;
 }
-.Inp .Border {
+.Text-input .Border {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -24,12 +24,13 @@
   transform-origin: 0 0;
   transition: all 0.15s ease;
 }
-.Inp input {
+.Text-input input {
   -webkit-appearance: none;
   width: 100%;
   border: 0;
   font-family: inherit;
-  padding: 12px 0;
+  padding: 18px 0 2px 0;
+  margin-top: 7px;
   height: 48px;
   font-size: 16px;
   font-weight: 500;
@@ -38,21 +39,21 @@
   color: #282c34;
   transition: all 0.15s ease;
 }
-.Inp input:hover {
+.Text-input input:hover {
   background: rgba(34,50,84,0.03);
 }
-.Inp input:not(:placeholder-shown) + span {
+.Text-input input:not(:placeholder-shown) + span {
   color: #5a667f;
   transform: translateY(-26px) scale(0.75);
 }
-.Inp input:focus {
+.Text-input input:focus {
   background: none;
   outline: none;
 }
-.Inp input:focus + span {
+.Text-input input:focus + span {
   color: #282c34;
   transform: translateY(-26px) scale(0.75);
 }
-.Inp input:focus + span + .Border {
+.Text-input input:focus + span + .Border {
   transform: scaleX(1);
 }

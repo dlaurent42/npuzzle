@@ -28,12 +28,15 @@ class App extends Component {
     puzzle: [],
     color: COLORS.GAME,
 
-
     // Display window parameters
     displayImport: false,
     displaySettings: false,
     displayShuffle: false,
     displayColorPicker: false,
+
+    // Form parameters
+    shuffleSize: 3,
+    shuffleIterations: 1000,
   }
 
   // Lifecyle Hook
@@ -79,15 +82,44 @@ class App extends Component {
   }
 
   // Actions handlers
-  handleShuffle = (size, numberOfIterations) => {
-    if (size >= 3 && size <= 5 && numberOfIterations >= 0 && numberOfIterations <= 10000) {
-      this.state.Puzzle.reset(this.state.Puzzle.heuristic);
-      const fileContent = getShuffledPuzzle(size, numberOfIterations);
-      this.state.Puzzle.getPuzzle(fileContent);
-      this.state.Puzzle.getSnailPuzzle();
-      this.state.Puzzle.isPuzzleSolvable();
-      const puzzle = [...this.state.Puzzle.puzzle];
-      this.setState(prevState => ({ puzzle, displayShuffle: !prevState.displayShuffle }));
+  handleShuffle = (e) => {
+    e.preventDefault();
+    const { shuffleSize, shuffleIterations } = this.state;
+    if (!/^\d+$/.test(shuffleSize) || !/^\d+$/.test(shuffleIterations)) return false;
+    if (shuffleSize < 3 || shuffleSize > 5) return false;
+    if (shuffleIterations < 0 || shuffleSize > 10000) return false;
+    this.state.Puzzle.reset(this.state.Puzzle.heuristic);
+    const fileContent = getShuffledPuzzle(shuffleSize, shuffleIterations);
+    const NewPuzzle = new PuzzleSolver();
+    NewPuzzle.getPuzzle(fileContent);
+    NewPuzzle.getSnailPuzzle();
+    NewPuzzle.isPuzzleSolvable();
+    this.setState(prevState => ({
+      Puzzle: NewPuzzle,
+      puzzle: NewPuzzle.puzzle,
+      displayShuffle: !prevState.displayShuffle,
+      shuffleSize: '',
+      shuffleIterations: '',
+    }));
+    return true;
+  }
+
+  handleShuffleSize = (e) => {
+    const shuffleSize = e.target.value;
+    if (/^\d+$/.test(shuffleSize)) this.setState({ shuffleSize: parseInt(shuffleSize, 10) });
+    else if (shuffleSize === '') this.setState({ shuffleSize: '' });
+  }
+
+  handleShuffleIterations = (e) => {
+    const shuffleIterations = e.target.value;
+    if (/^\d+$/.test(shuffleIterations)) this.setState({ shuffleIterations: parseInt(shuffleIterations, 10) });
+    else if (shuffleIterations === '') this.setState({ shuffleIterations: '' });
+  }
+
+  handleColorPicker = (e) => {
+    e.preventDefault();
+    if (this.state.color !== COLORS[e.target.value]) {
+      this.setState({ color: COLORS[e.target.value], displayColorPicker: false });
     }
   }
 
@@ -105,8 +137,19 @@ class App extends Component {
           showSettings={this.showSettings}
           showColorPicker={this.showColorPicker}
         />
-        <Shuffle show={this.state.displayShuffle} onValidate={this.handleShuffle} />
-        <ColorPicker show={this.state.displayColorPicker} />
+        <Shuffle
+          show={this.state.displayShuffle}
+          shuffleSize={this.state.shuffleSize}
+          onSizeChange={this.handleShuffleSize}
+          shuffleIterations={this.state.shuffleIterations}
+          onIterationsChange={this.handleShuffleIterations}
+          onValidate={this.handleShuffle}
+        />
+        <ColorPicker
+          show={this.state.displayColorPicker}
+          color={this.state.color}
+          onClick={this.handleColorPicker}
+        />
         <ImportFile show={this.state.displayImport} />
         <Settings show={this.state.displaySettings} />
         <div className="App-container">
