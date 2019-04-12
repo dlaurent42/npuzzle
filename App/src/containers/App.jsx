@@ -130,10 +130,7 @@ class App extends Component {
   handleSettings = (e) => {
     e.preventDefault();
     const { greedy, heuristic, Puzzle } = this.state;
-    if (greedy === Puzzle.greedySearch && heuristic === Puzzle.heuristic) {
-      console.dir('returning false');
-      return false;
-    }
+    if (greedy === Puzzle.greedySearch && heuristic === Puzzle.heuristic) return false;
     Puzzle.reset(heuristic, greedy);
     if (this.state.solved) {
       this.setState(prevState => ({
@@ -159,9 +156,18 @@ class App extends Component {
 
   // Action handlers for controls
   handleSolvePuzzle = () => {
-    // this.setState({ solving: true }, this.state.Puzzle.solve());
-    this.setState({ solving: true }, () => { setTimeout(() => {}, 10000); });
-    // this.setState({ solved: true, solving: false });
+    console.dir(`Before all ${this.state.solving}`);
+    console.dir(`Puzzle solvable: ${this.state.Puzzle.solvable}`);
+    this.setState({ solving: true }, () => {
+      console.dir(`After setstate ${this.state.solving}`);
+      this.state.Puzzle.solve()
+        .then(() => {
+          console.dir(`After solve ${this.state.solving}`);
+          this.setState({ solved: true, solving: false }, () => {
+            console.dir(`After last setstate ${this.state.solving}`);
+          });
+        });
+    });
   }
 
   handlePreviousStep = () => {
@@ -180,7 +186,10 @@ class App extends Component {
 
   // Rendering
   render() {
+    console.dir(`Call render() with this.state.solving = ${this.state.solving}`);
     const spinner = (this.state.solving) ? <div className="App-mask"><Spinner>Solving...</Spinner></div> : null;
+    if (spinner === null) console.dir('Spinner is null');
+    else console.dir('Spinner is not null');
     return (
       <div className="App">
         {spinner}

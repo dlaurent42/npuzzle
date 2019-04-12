@@ -352,53 +352,59 @@ class PuzzleSolver extends Puzzle {
 
   // Main solving function
   solve() {
-    // Variable used to assess execution duration
-    const timestamp = moment();
 
-    // Initialize solver
-    this.OpenSet.enqueue({
-      parent: null,
-      index: this.puzzleToIndex(this.puzzle),
-      move: null,
-      puzzle: cloneDeep(this.puzzle),
-      cost: 0,
-      distance: this.getDistance(this.puzzle),
-    }, 0);
+    return new Promise((resolve) => {
+      // Variable used to assess execution duration
+      const timestamp = moment();
 
-    // Define a variable to determine wheter to continue or not
-    let solutionFound = false;
+      // Initialize solver
+      this.OpenSet.enqueue({
+        parent: null,
+        index: this.puzzleToIndex(this.puzzle),
+        move: null,
+        puzzle: cloneDeep(this.puzzle),
+        cost: 0,
+        distance: this.getDistance(this.puzzle),
+      }, 0);
 
-    // Main loop
-    while (!solutionFound) {
+      // Define a variable to determine wheter to continue or not
+      let solutionFound = false;
 
-      // Assess complexity in size
-      this.complexityInSize = Math.max(this.complexityInSize, this.OpenSet.items.length);
+      // Main loop
+      while (!solutionFound) {
 
-      // Pop first element from openSet
-      const { element } = this.OpenSet.dequeue();
+        // Assess complexity in size
+        this.complexityInSize = Math.max(this.complexityInSize, this.OpenSet.items.length);
 
-      // Move element to closeSet
-      this.closedSet.push(element);
+        // Pop first element from openSet
+        const { element } = this.OpenSet.dequeue();
 
-      // Stop condition
-      if (element.distance === 0) {
-        solutionFound = true;
-        this.numberOfSwaps = element.cost;
-        this.complexityInTime = this.closedSet.length;
-        this.duration = Math.abs(timestamp.diff(moment()));
-        this.getFinalSet();
-        return;
+        // Move element to closeSet
+        this.closedSet.push(element);
+        console.dir('...solving');
+        // Stop condition
+        if (element.distance === 0) {
+          solutionFound = true;
+          this.numberOfSwaps = element.cost;
+          this.complexityInTime = this.closedSet.length;
+          this.duration = Math.abs(timestamp.diff(moment()));
+          this.getFinalSet();
+          console.dir('In loop but solved');
+          return resolve();
+        }
+
+        // Find data relative to element 0
+        const zero = find(element.puzzle, { value: 0 });
+
+        // Handle moves
+        if (element.move !== 'up' && zero.y + 1 < this.size) this.swapTiles(element, 'down');
+        if (element.move !== 'down' && zero.y) this.swapTiles(element, 'up');
+        if (element.move !== 'left' && zero.x + 1 < this.size) this.swapTiles(element, 'right');
+        if (element.move !== 'right' && zero.x) this.swapTiles(element, 'left');
       }
-
-      // Find data relative to element 0
-      const zero = find(element.puzzle, { value: 0 });
-
-      // Handle moves
-      if (element.move !== 'up' && zero.y + 1 < this.size) this.swapTiles(element, 'down');
-      if (element.move !== 'down' && zero.y) this.swapTiles(element, 'up');
-      if (element.move !== 'left' && zero.x + 1 < this.size) this.swapTiles(element, 'right');
-      if (element.move !== 'right' && zero.x) this.swapTiles(element, 'left');
-    }
+      console.dir('Outside loop and solved');
+      return resolve();
+    });
   }
 }
 

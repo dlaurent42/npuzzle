@@ -1,0 +1,8 @@
+- Spinner + real time execution time loop
+- Max Execution time
+- Click out of the box
+- Conditionnal display
+- Shuffle again if not solvable
+- Size Max ?
+- set config as .env + variable for default / min / max values
+- responsive (+ adjust puzzle display) + scroll
