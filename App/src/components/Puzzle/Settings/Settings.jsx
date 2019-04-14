@@ -14,9 +14,14 @@ const settings = props => (
     <Heuristics heuristic={props.heuristic} onHeuristicChange={props.onHeuristicChange} />
     <h1>Greedy Search</h1>
     <Greedy greedy={props.greedy} onGreedyChange={props.onGreedyChange} />
-    <Button btnAttr="Validate" onClick={props.onValidate}>
-      <Icon active icon={ICONS.VALIDATE} />
-    </Button>
+    <div className="Buttons">
+      <Button btnAttr="Cancel" onClick={props.close}>
+        <Icon active icon={ICONS.CANCEL} />
+      </Button>
+      <Button btnAttr="Validate" onClick={props.onValidate}>
+        <Icon active icon={ICONS.VALIDATE} />
+      </Button>
+    </div>
   </Form>
 );
 
@@ -24,6 +29,7 @@ settings.propTypes = {
   show: PropTypes.bool.isRequired,
   heuristic: PropTypes.string.isRequired,
   greedy: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
   onValidate: PropTypes.func.isRequired,
   onGreedyChange: PropTypes.func.isRequired,
   onHeuristicChange: PropTypes.func.isRequired,

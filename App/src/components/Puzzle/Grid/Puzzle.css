@@ -1,5 +1,6 @@
 .Grid {
   width: 30vw;
+  height: 30vw;
   display: grid;
   grid-template-columns: repeat(auto-fill, 25%);
   grid-auto-rows: 1fr;
@@ -31,4 +32,20 @@
   align-items: center;
   display: flex;
   justify-content: center;
+}
+
+@media (max-width: 1200px) {
+  .Grid {
+    width: 40vw;
+    height: 40vw;
+    padding: 25px;
+  }
+}
+
+@media (max-width: 500px) {
+  .Grid {
+    width: 80vw;
+    height: 80vw;
+    padding: 10px;
+  }
 }

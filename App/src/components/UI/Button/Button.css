@@ -26,3 +26,7 @@
   color: #FB2441;
   color: #E32842;
 }
+.Validate:hover, .Cancel:hover {
+  transform: scale(1.2, 1.2);
+	transition: transform 0.8s;  
+}

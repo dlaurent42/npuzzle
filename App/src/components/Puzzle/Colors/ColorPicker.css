@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   line-height: 40px;
+  right: calc(100px + 4vh);
 }
 
 .Color-picker .Radio-input {
@@ -50,4 +51,17 @@ div#GAME {
 }
 div#BLOODY {
   background-image: linear-gradient(to right, rgb(255, 81, 47) , rgb(221, 45, 118));
+}
+
+
+@media (max-width: 500px) {
+  .Color-picker .Color-gradient {
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+  }
+
+  .Color-picker label:hover .Color-gradient {
+    width: 120px;
+  }
 }

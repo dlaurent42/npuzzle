@@ -1,6 +1,7 @@
 .Settings {
   display: flex;
   flex-direction: column;
+  right: calc(8vh + 140px);
 }
 
 .Settings .Radio-input {
@@ -29,4 +30,12 @@
 
 .Settings h1:not(:first-child) {
   margin-top: 25px;
+}
+
+.Settings .Validate {
+  font-size: 45px;
+}
+
+.Buttons {
+  display: flex;
 }

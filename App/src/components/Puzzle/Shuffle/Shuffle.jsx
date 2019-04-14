@@ -17,9 +17,14 @@ const shuffle = props => (
       shuffleIterations={props.shuffleIterations}
       onIterationsChange={props.onIterationsChange}
     />
-    <Button btnAttr="Validate" onClick={props.onValidate}>
-      <Icon active icon={ICONS.VALIDATE} />
-    </Button>
+    <div className="Buttons">
+      <Button btnAttr="Cancel" onClick={props.close}>
+        <Icon active icon={ICONS.CANCEL} />
+      </Button>
+      <Button btnAttr="Validate" onClick={props.onValidate}>
+        <Icon active icon={ICONS.VALIDATE} />
+      </Button>
+    </div>
   </Form>
 );
 
@@ -33,6 +38,7 @@ shuffle.propTypes = {
     PropTypes.string,
     PropTypes.number,
   ]).isRequired,
+  close: PropTypes.func.isRequired,
   onSizeChange: PropTypes.func.isRequired,
   onIterationsChange: PropTypes.func.isRequired,
   onValidate: PropTypes.func.isRequired,

@@ -13,6 +13,7 @@ const header = props => (
       <Icon classNames={['Icon']} icon={ICONS.COLORPICKER} onClick={props.showColorPicker} active={props.displayColorPicker} />
       <Icon classNames={['Icon']} icon={ICONS.STATS} onClick={props.showStatistics} active={props.displayStatistics} />
     </div>
+    {props.children}
   </div>
 );
 

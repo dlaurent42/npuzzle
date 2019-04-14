@@ -1,13 +1,7 @@
 .App-footer {
   position: absolute;
   bottom: 0;
-  font-size: 25px;
+  height: 4vh;
+  font-size: 2vh;
   color: white;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 500px) {
-  .App-footer {
-    font-size: 15px;
-  }
 }

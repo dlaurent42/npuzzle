@@ -1,6 +1,7 @@
 .Shuffle {
   display: flex;
   flex-direction: column;
+  right: calc(12vh + 180px);
 }
 
 .Shuffle .Radio-input {
@@ -29,4 +30,12 @@
 
 .Shuffle h1:not(:first-child) {
   margin-top: 25px;
+}
+
+.Shuffle .Validate {
+  font-size: 45px;
+}
+
+.Buttons {
+  display: flex;
 }
