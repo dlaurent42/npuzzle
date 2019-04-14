@@ -9,7 +9,6 @@ import Shuffle from '../components/Puzzle/Shuffle/Shuffle';
 import Settings from '../components/Puzzle/Settings/Settings';
 import PuzzleGrid from '../components/Puzzle/Grid/Puzzle';
 import Statistics from '../components/Puzzle/Statistics/Statistics';
-import Spinner from '../components/UI/Spinner/Spinner';
 
 // Utils
 import getShuffledPuzzle from '../utils/getShuffledPuzzle';
@@ -24,6 +23,7 @@ import {
   HEURISTICS,
   SIZES,
   ITERATIONS,
+  EXECTIME,
 } from '../config/constants';
 
 class App extends Component {
@@ -38,7 +38,7 @@ class App extends Component {
     greedy: false,
     solved: false,
     currentStep: 0,
-    solving: false,
+    error: false,
 
     // Display window parameters
     displaySettings: false,
@@ -175,18 +175,13 @@ class App extends Component {
 
   // Action handlers for controls
   handleSolvePuzzle = () => {
-    console.dir(`Before all ${this.state.solving}`);
-    console.dir(`Puzzle solvable: ${this.state.Puzzle.solvable}`);
-    this.setState({ solving: true }, () => {
-      console.dir(`After setstate ${this.state.solving}`);
-      this.state.Puzzle.solve()
-        .then(() => {
-          console.dir(`After solve ${this.state.solving}`);
-          this.setState({ solved: true, solving: false }, () => {
-            console.dir(`After last setstate ${this.state.solving}`);
-          });
-        });
-    });
+    if (this.state.Puzzle.solve()) this.setState({ solved: true });
+    else {
+      this.setState(
+        { error: true },
+        () => { setTimeout(() => { this.setState({ error: false }); }, 3000); }
+      );
+    }
   }
 
   handlePreviousStep = () => {
@@ -205,10 +200,10 @@ class App extends Component {
 
   // Rendering
   render() {
-    const spinner = (this.state.solving) ? <div className="App-mask"><Spinner>Solving...</Spinner></div> : null;
+    const error = (this.state.error) ? <div className="App-mask">{`Puzzle could not be solved in ${EXECTIME / 1000} seconds.`}</div> : null;
     return (
       <div className="App">
-        {spinner}
+        {error}
         <Header
           displaySettings={this.state.displaySettings}
           displayShuffle={this.state.displayShuffle}
