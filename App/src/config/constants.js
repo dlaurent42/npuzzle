@@ -18,6 +18,7 @@ const ICONS = {
   CHECKBOX: 'check-square',
   EMPTYCHECKBOX: 'square',
   STATS: 'chart-bar',
+  EGG: 'egg',
 };
 
 const COLORS = {
