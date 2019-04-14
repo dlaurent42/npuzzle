@@ -7,7 +7,7 @@ import {
 import moment from 'moment';
 
 import PriorityQueue from './PriorityQueue';
-import { HEURISTICS } from '../config/constants';
+import { HEURISTICS, EXECTIME } from '../config/constants';
 
 // This class handles all data and methods relative to the puzzle
 class Puzzle {
@@ -353,58 +353,58 @@ class PuzzleSolver extends Puzzle {
   // Main solving function
   solve() {
 
-    return new Promise((resolve) => {
-      // Variable used to assess execution duration
-      const timestamp = moment();
+    // Variable used to assess execution duration
+    const timestamp = moment();
 
-      // Initialize solver
-      this.OpenSet.enqueue({
-        parent: null,
-        index: this.puzzleToIndex(this.puzzle),
-        move: null,
-        puzzle: cloneDeep(this.puzzle),
-        cost: 0,
-        distance: this.getDistance(this.puzzle),
-      }, 0);
+    // Initialize solver
+    this.OpenSet.enqueue({
+      parent: null,
+      index: this.puzzleToIndex(this.puzzle),
+      move: null,
+      puzzle: cloneDeep(this.puzzle),
+      cost: 0,
+      distance: this.getDistance(this.puzzle),
+    }, 0);
 
-      // Define a variable to determine wheter to continue or not
-      let solutionFound = false;
+    // Define variables to determine wheter to continue or not
+    let solutionFound = false;
+    let duration = 0;
 
-      // Main loop
-      while (!solutionFound) {
+    // Main loop
+    while (!solutionFound && duration < EXECTIME) {
 
-        // Assess complexity in size
-        this.complexityInSize = Math.max(this.complexityInSize, this.OpenSet.items.length);
+      // Set duration
+      duration = Math.abs(timestamp.diff(moment()));
 
-        // Pop first element from openSet
-        const { element } = this.OpenSet.dequeue();
+      // Assess complexity in size
+      this.complexityInSize = Math.max(this.complexityInSize, this.OpenSet.items.length);
 
-        // Move element to closeSet
-        this.closedSet.push(element);
-        console.dir('...solving');
-        // Stop condition
-        if (element.distance === 0) {
-          solutionFound = true;
-          this.numberOfSwaps = element.cost;
-          this.complexityInTime = this.closedSet.length;
-          this.duration = Math.abs(timestamp.diff(moment()));
-          this.getFinalSet();
-          console.dir('In loop but solved');
-          return resolve();
-        }
+      // Pop first element from openSet
+      const { element } = this.OpenSet.dequeue();
 
-        // Find data relative to element 0
-        const zero = find(element.puzzle, { value: 0 });
-
-        // Handle moves
-        if (element.move !== 'up' && zero.y + 1 < this.size) this.swapTiles(element, 'down');
-        if (element.move !== 'down' && zero.y) this.swapTiles(element, 'up');
-        if (element.move !== 'left' && zero.x + 1 < this.size) this.swapTiles(element, 'right');
-        if (element.move !== 'right' && zero.x) this.swapTiles(element, 'left');
+      // Move element to closeSet
+      this.closedSet.push(element);
+      // Stop condition
+      if (element.distance === 0) {
+        solutionFound = true;
+        this.numberOfSwaps = element.cost;
+        this.complexityInTime = this.closedSet.length;
+        this.duration = duration;
+        this.getFinalSet();
+        return solutionFound;
       }
-      console.dir('Outside loop and solved');
-      return resolve();
-    });
+
+      // Find data relative to element 0
+      const zero = find(element.puzzle, { value: 0 });
+
+      // Handle moves
+      if (element.move !== 'up' && zero.y + 1 < this.size) this.swapTiles(element, 'down');
+      if (element.move !== 'down' && zero.y) this.swapTiles(element, 'up');
+      if (element.move !== 'left' && zero.x + 1 < this.size) this.swapTiles(element, 'right');
+      if (element.move !== 'right' && zero.x) this.swapTiles(element, 'left');
+    }
+
+    return solutionFound;
   }
 }
 

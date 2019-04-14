@@ -29,8 +29,10 @@ const COLORS = {
 
 const SIZES = [3, 4, 5];
 const ITERATIONS = [1, 10, 100, 1000];
+const EXECTIME = 1000 * 60 * 2; // Maximum execution time set to 2 minutes
 
 module.exports = {
+  EXECTIME,
   HEURISTICS,
   ICONS,
   COLORS,
