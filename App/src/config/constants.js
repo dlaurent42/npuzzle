@@ -26,4 +26,13 @@ const COLORS = {
   BLOODY: 'Bloody Mary',
 };
 
-module.exports = { HEURISTICS, ICONS, COLORS };
+const SIZES = [3, 4];
+const ITERATIONS = [1, 10, 100, 1000];
+
+module.exports = {
+  HEURISTICS,
+  ICONS,
+  COLORS,
+  SIZES,
+  ITERATIONS,
+};

@@ -144,7 +144,10 @@ class App extends Component {
 
   handleGreedyChange = (e) => {
     e.preventDefault();
-    this.setState(prevState => ({ greedy: !prevState.greedy }));
+    const greedy = (e.target.value === 'yes');
+    if (greedy !== this.state.greedy) {
+      this.setState({ greedy });
+    }
   }
 
   handleHeuristicChange = (e) => {
@@ -186,10 +189,10 @@ class App extends Component {
 
   // Rendering
   render() {
-    console.dir(`Call render() with this.state.solving = ${this.state.solving}`);
+    // console.dir(`Call render() with this.state.solving = ${this.state.solving}`);
     const spinner = (this.state.solving) ? <div className="App-mask"><Spinner>Solving...</Spinner></div> : null;
-    if (spinner === null) console.dir('Spinner is null');
-    else console.dir('Spinner is not null');
+    // if (spinner === null) console.dir('Spinner is null');
+    // else console.dir('Spinner is not null');
     return (
       <div className="App">
         {spinner}

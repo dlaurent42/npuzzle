@@ -3,11 +3,7 @@
   flex-direction: column;
 }
 
-.Greedy {
-  margin-top: 20px;
-}
-
-.Settings .Radio-input, .Settings .Greedy {
+.Settings .Radio-input {
   font-size: 20px;
   color: rgb(34,50,84);
   padding: 10px;
@@ -17,10 +13,16 @@
   min-width: 200px;
 }
 
-.Settings .Radio-input:hover, .Settings .Greedy:hover {
+.Settings .Radio-input:hover {
   background: rgba(34,50,84,0.1);
   border-radius: 20px 0px 20px 20px;
   opacity: 1;
   -webkit-transition: opacity 0.5s;
 	transition: opacity 0.5s;
+}
+
+.Settings h1 {
+  color: rgb(34,50,84);
+  margin: 5px auto;
+  font-size: 25px;
 }

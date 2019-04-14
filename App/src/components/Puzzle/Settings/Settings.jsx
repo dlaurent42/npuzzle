@@ -5,7 +5,6 @@ import Icon from '../../UI/Icon/Icon';
 import Form from '../../UI/Form/Form';
 import Button from '../../UI/Button/Button';
 import RadioButton from '../../UI/Input/RadioInput';
-import CheckboxButton from '../../UI/Input/CheckboxInput';
 import './Settings.css';
 
 const settings = (props) => {
@@ -34,24 +33,39 @@ const settings = (props) => {
   });
 
   // Get switch button
-  const box = (props.greedy)
+  const yesBox = (props.greedy)
     ? <Icon icon={ICONS.CHECKBOX} active />
     : <Icon icon={ICONS.EMPTYCHECKBOX} active />;
+  const noBox = (props.greedy)
+    ? <Icon icon={ICONS.EMPTYCHECKBOX} active />
+    : <Icon icon={ICONS.CHECKBOX} active />;
   const greedy = (
     <div className="Greedy">
-      <CheckboxButton
-        value="greedy"
+      <RadioButton
+        key="yes"
+        value="yes"
         name="greedy"
         onChange={props.onGreedyChange}
       >
-        Greedy Search
-        {box}
-      </CheckboxButton>
+        Yes
+        {yesBox}
+      </RadioButton>
+      <RadioButton
+        key="no"
+        value="no"
+        name="greedy"
+        onChange={props.onGreedyChange}
+      >
+        No
+        {noBox}
+      </RadioButton>
     </div>
   );
   return (
     <Form show={props.show} classNames={['Settings']}>
+      <h1>Heuristics</h1>
       {heuristics}
+      <h1>Greedy Search</h1>
       {greedy}
       <Button btnAttr="Validate" onClick={props.onValidate}>
         <Icon active icon={ICONS.VALIDATE} />
