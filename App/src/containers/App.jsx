@@ -8,6 +8,7 @@ import ColorPicker from '../components/Puzzle/Colors/ColorPicker';
 import Shuffle from '../components/Puzzle/Shuffle/Shuffle';
 import Settings from '../components/Puzzle/Settings/Settings';
 import PuzzleGrid from '../components/Puzzle/Grid/Puzzle';
+import Statistics from '../components/Puzzle/Statistics/Statistics';
 import Spinner from '../components/UI/Spinner/Spinner';
 
 // Utils
@@ -38,6 +39,7 @@ class App extends Component {
     displaySettings: false,
     displayShuffle: false,
     displayColorPicker: false,
+    displayStatistics: false,
 
     // Form parameters
     shuffleSize: 3,
@@ -57,32 +59,38 @@ class App extends Component {
   }
 
   // Display handlers
-  showHandler = (displaySettings, displayShuffle, displayColorPicker) => {
+  showHandler = (displaySettings, displayShuffle, displayColorPicker, displayStatistics) => {
     this.setState({
       displaySettings,
       displayShuffle,
       displayColorPicker,
+      displayStatistics,
     });
   }
 
   showShuffleOptions = () => {
-    if (this.state.displayShuffle) this.showHandler(false, false, false);
-    else this.showHandler(false, true, false);
+    if (this.state.displayShuffle) this.showHandler(false, false, false, false);
+    else this.showHandler(false, true, false, false);
   }
 
   showSettings = () => {
     if (this.state.displaySettings) {
-      this.showHandler(false, false, false);
+      this.showHandler(false, false, false, false);
       this.setState(prevState => ({
         heuristic: prevState.Puzzle.heuristic,
         greedy: prevState.Puzzle.greedySearch,
       }));
-    } else this.showHandler(true, false, false);
+    } else this.showHandler(true, false, false, false);
   }
 
   showColorPicker = () => {
-    if (this.state.displayColorPicker) this.showHandler(false, false, false);
-    else this.showHandler(false, false, true);
+    if (this.state.displayColorPicker) this.showHandler(false, false, false, false);
+    else this.showHandler(false, false, true, false);
+  }
+
+  showStatistics = () => {
+    if (this.state.displayStatistics) this.showHandler(false, false, false, false);
+    else this.showHandler(false, false, false, true);
   }
 
   // Action handlers for shuffle
@@ -189,10 +197,7 @@ class App extends Component {
 
   // Rendering
   render() {
-    // console.dir(`Call render() with this.state.solving = ${this.state.solving}`);
     const spinner = (this.state.solving) ? <div className="App-mask"><Spinner>Solving...</Spinner></div> : null;
-    // if (spinner === null) console.dir('Spinner is null');
-    // else console.dir('Spinner is not null');
     return (
       <div className="App">
         {spinner}
@@ -200,9 +205,11 @@ class App extends Component {
           displaySettings={this.state.displaySettings}
           displayShuffle={this.state.displayShuffle}
           displayColorPicker={this.state.displayColorPicker}
+          displayStatistics={this.state.displayStatistics}
           showShuffleOptions={this.showShuffleOptions}
           showSettings={this.showSettings}
           showColorPicker={this.showColorPicker}
+          showStatistics={this.showStatistics}
         />
         <Shuffle
           show={this.state.displayShuffle}
@@ -224,6 +231,14 @@ class App extends Component {
           onValidate={this.handleSettings}
           onGreedyChange={this.handleGreedyChange}
           onHeuristicChange={this.handleHeuristicChange}
+        />
+        <Statistics
+          show={this.state.displayStatistics}
+          solved={this.state.solved}
+          numberOfSwaps={this.state.Puzzle.numberOfSwaps}
+          complexityInSize={this.state.Puzzle.complexityInSize}
+          complexityInTime={this.state.Puzzle.complexityInTime}
+          duration={this.state.Puzzle.duration}
         />
         <div className="App-container">
           <PuzzleGrid

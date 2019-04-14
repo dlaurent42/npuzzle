@@ -1,0 +1,14 @@
+.Statistics {
+  max-width: 300px;
+  font-size: 20px;
+  color: rgb(34,50,84);
+}
+
+.Statistics .Statistics-el {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Statistics .Statistics-el span:first-child {
+  margin-right: 35px;
+}

@@ -15,6 +15,7 @@ import {
   faTimes,
   faSquare,
   faCheckSquare,
+  faChartBar,
 } from '@fortawesome/free-solid-svg-icons';
 
 import App from './containers/App';
@@ -32,6 +33,7 @@ library.add(
   faTimes,
   faSquare,
   faCheckSquare,
+  faChartBar,
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));

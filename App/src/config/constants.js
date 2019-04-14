@@ -17,6 +17,7 @@ const ICONS = {
   CANCEL: 'times',
   CHECKBOX: 'check-square',
   EMPTYCHECKBOX: 'square',
+  STATS: 'chart-bar',
 };
 
 const COLORS = {
