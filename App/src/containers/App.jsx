@@ -19,7 +19,12 @@ import PuzzleSolver from '../helpers/Puzzle';
 
 // Others
 import './App.css';
-import { COLORS, HEURISTICS } from '../config/constants';
+import {
+  COLORS,
+  HEURISTICS,
+  SIZES,
+  ITERATIONS,
+} from '../config/constants';
 
 class App extends Component {
 
@@ -116,15 +121,18 @@ class App extends Component {
   }
 
   handleShuffleSize = (e) => {
-    const shuffleSize = e.target.value;
-    if (/^\d+$/.test(shuffleSize)) this.setState({ shuffleSize: parseInt(shuffleSize, 10) });
-    else if (shuffleSize === '') this.setState({ shuffleSize: '' });
+    const shuffleSize = parseInt(e.target.value, 10);
+    if (SIZES.indexOf(shuffleSize) !== -1 && shuffleSize !== this.state.shuffleSize) {
+      this.setState({ shuffleSize });
+    }
   }
 
   handleShuffleIterations = (e) => {
-    const shuffleIterations = e.target.value;
-    if (/^\d+$/.test(shuffleIterations)) this.setState({ shuffleIterations: parseInt(shuffleIterations, 10) });
-    else if (shuffleIterations === '') this.setState({ shuffleIterations: '' });
+    const shuffleIterations = parseInt(e.target.value, 10);
+    if (ITERATIONS.indexOf(shuffleIterations) !== -1
+    && shuffleIterations !== this.state.shuffleIterations) {
+      this.setState({ shuffleIterations });
+    }
   }
 
   // Action handler for color picker

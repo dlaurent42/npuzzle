@@ -27,7 +27,7 @@ const COLORS = {
   BLOODY: 'Bloody Mary',
 };
 
-const SIZES = [3, 4];
+const SIZES = [3, 4, 5];
 const ITERATIONS = [1, 10, 100, 1000];
 
 module.exports = {

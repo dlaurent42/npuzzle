@@ -3,14 +3,20 @@ import PropTypes from 'prop-types';
 import Button from '../../UI/Button/Button';
 import Form from '../../UI/Form/Form';
 import Icon from '../../UI/Icon/Icon';
-import TextInput from '../../UI/Input/TextInput';
+import Iterations from './Iterations';
+import Sizes from './Sizes';
 import { ICONS } from '../../../config/constants';
 import './Shuffle.css';
 
 const shuffle = props => (
   <Form show={props.show} classNames={['Shuffle']}>
-    <TextInput label="Size [3, 4, 5]" value={props.shuffleSize} onChange={props.onSizeChange} />
-    <TextInput label="Iterations [0...10000]" value={props.shuffleIterations} onChange={props.onIterationsChange} />
+    <h1>Puzzle size</h1>
+    <Sizes shuffleSize={props.shuffleSize} onSizeChange={props.onSizeChange} />
+    <h1>Mixing level level</h1>
+    <Iterations
+      shuffleIterations={props.shuffleIterations}
+      onIterationsChange={props.onIterationsChange}
+    />
     <Button btnAttr="Validate" onClick={props.onValidate}>
       <Icon active icon={ICONS.VALIDATE} />
     </Button>
