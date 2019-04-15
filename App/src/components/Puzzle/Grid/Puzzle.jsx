@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { find } from 'lodash';
-import { COLORS } from '../../../config/constants';
+import { COLORS, ICONS } from '../../../config/constants';
+import Icon from '../../UI/Icon/Icon';
 import getDistanceRatio from '../../../utils/getDistanceRatio';
 import './Puzzle.css';
 
@@ -31,7 +32,8 @@ const puzzle = (props) => {
       else rgb.push(221 + (1 - r) * 34, 34 + (1 - r) * 45, 118 + (r - 1) * 71);
 
       // Push tile to tiles array
-      puzzleTiles.push(<div key={`${obj.value}_${x}_${y}`} style={{ background: `rgb(${rgb.join(',')})` }}>{obj.value}</div>);
+      if (obj.value === 0) puzzleTiles.push(<div key={`${obj.value}_${x}_${y}`} style={{ background: `rgb(${rgb.join(',')})` }}><Icon active classNames={['EasterEgg']} onClick={props.toggleEasterEgg} icon={ICONS.EGG} /></div>);
+      else puzzleTiles.push(<div key={`${obj.value}_${x}_${y}`} style={{ background: `rgb(${rgb.join(',')})` }}>{obj.value}</div>);
 
       // Increment counters
       x += 1;
@@ -54,6 +56,7 @@ puzzle.propTypes = {
   size: PropTypes.number,
   puzzle: PropTypes.arrayOf(PropTypes.any),
   color: PropTypes.string,
+  toggleEasterEgg: PropTypes.func.isRequired,
 };
 
 puzzle.defaultProps = {

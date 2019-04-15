@@ -34,6 +34,10 @@
   justify-content: center;
 }
 
+.EasterEgg {
+  cursor: pointer;
+}
+
 @media (max-width: 1200px) {
   .Grid {
     width: 40vw;

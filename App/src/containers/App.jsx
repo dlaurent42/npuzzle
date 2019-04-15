@@ -9,6 +9,7 @@ import Shuffle from '../components/Puzzle/Shuffle/Shuffle';
 import Settings from '../components/Puzzle/Settings/Settings';
 import PuzzleGrid from '../components/Puzzle/Grid/Puzzle';
 import Statistics from '../components/Puzzle/Statistics/Statistics';
+import EasterEgg from '../components/Navigation/EasterEgg/EasterEgg';
 
 // Utils
 import getShuffledPuzzle from '../utils/getShuffledPuzzle';
@@ -17,7 +18,6 @@ import getShuffledPuzzle from '../utils/getShuffledPuzzle';
 import PuzzleSolver from '../helpers/Puzzle';
 
 // Others
-import './App.css';
 import {
   COLORS,
   HEURISTICS,
@@ -25,6 +25,8 @@ import {
   ITERATIONS,
   EXECTIME,
 } from '../config/constants';
+import EASTEREGGS from '../config/easterEgg';
+import './App.css';
 
 class App extends Component {
 
@@ -49,6 +51,9 @@ class App extends Component {
     // Form parameters
     shuffleSize: 3,
     shuffleIterations: 1000,
+
+    easterEgg: false,
+    displaySolvedEgg: false,
   }
 
   // Lifecyle Hook
@@ -96,6 +101,13 @@ class App extends Component {
   showStatistics = () => {
     if (this.state.displayStatistics) this.showHandler(false, false, false, false);
     else this.showHandler(false, false, false, true);
+  }
+
+  // Activate / Deactive easter egg
+  toggleEasterEgg = () => {
+    if (this.state.easterEgg) console.dir('easter egg deactivated');
+    else console.dir('easter egg activated');
+    this.setState(prevState => ({ easterEgg: !prevState.easterEgg }));
   }
 
   // Action handlers for shuffle
@@ -173,10 +185,16 @@ class App extends Component {
     }
   }
 
-  // Action handlers for controls
+  // Action handlers for controls and solving
   handleSolvePuzzle = () => {
-    if (this.state.Puzzle.solve()) this.setState({ solved: true });
-    else {
+    const solved = this.state.Puzzle.solve(); // eslint-disable-line
+    if (solved && !this.state.easterEgg) this.setState({ solved });
+    else if (solved && this.state.easterEgg) {
+      this.setState(
+        { solved, displaySolvedEgg: true },
+        () => { setTimeout(() => { this.setState({ displaySolvedEgg: false }); }, 5000); }
+      );
+    } else {
       this.setState(
         { error: true },
         () => { setTimeout(() => { this.setState({ error: false }); }, 3000); }
@@ -201,9 +219,11 @@ class App extends Component {
   // Rendering
   render() {
     const error = (this.state.error) ? <div className="App-mask">{`Puzzle could not be solved in ${EXECTIME / 1000} seconds.`}</div> : null;
+    const easterEgg = (this.state.displaySolvedEgg) ? <div className="App-mask">{EASTEREGGS[Math.floor(Math.random() * 2)]}</div> : null;
     return (
       <div className="App">
         {error}
+        {easterEgg}
         <Header
           displaySettings={this.state.displaySettings}
           displayShuffle={this.state.displayShuffle}
@@ -255,6 +275,7 @@ class App extends Component {
             puzzle={this.state.puzzle}
             snail={this.state.Puzzle.snail}
             heuristic={this.state.Puzzle.heuristic}
+            toggleEasterEgg={this.toggleEasterEgg}
           />
           <Controls
             currentStep={this.state.currentStep}
@@ -266,6 +287,7 @@ class App extends Component {
           />
         </div>
         <Footer />
+        <EasterEgg show={this.state.easterEgg} />
       </div>
     );
   }
