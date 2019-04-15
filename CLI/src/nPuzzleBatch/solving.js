@@ -36,16 +36,19 @@ const solveThis = (heuristic, greedy, fileContent, file) => {
   if (Puzzle.size > 4) fs.appendFileSync(file, 'Warning: puzzle is big so it can take time to solve.\n', 'utf8');
 
   // Solve puzzle
-  Puzzle.solve();
-
-  // Print results
+  const solved = Puzzle.solve();
   fs.appendFileSync(file, `\nHeuristic: ${Puzzle.heuristic}\n`, 'utf8');
   if (Puzzle.greedySearch) fs.appendFileSync(file, 'greedy activated\n', 'utf8');
   else fs.appendFileSync(file, 'greedy deactivated\n', 'utf8');
-  fs.appendFileSync(file, `Number of swaps: ${Puzzle.numberOfSwaps}\n`, 'utf8');
-  fs.appendFileSync(file, `Complexity in size: ${Puzzle.complexityInSize}\n`, 'utf8');
-  fs.appendFileSync(file, `Complexity in time: ${Puzzle.complexityInTime}\n`, 'utf8');
-  fs.appendFileSync(file, `Execution duration: ${Puzzle.duration}ms\n\n`, 'utf8');
+  if (solved) {
+
+    // Print results
+    fs.appendFileSync(file, `Number of swaps: ${Puzzle.numberOfSwaps}\n`, 'utf8');
+    fs.appendFileSync(file, `Complexity in size: ${Puzzle.complexityInSize}\n`, 'utf8');
+    fs.appendFileSync(file, `Complexity in time: ${Puzzle.complexityInTime}\n`, 'utf8');
+    fs.appendFileSync(file, `Execution duration: ${Puzzle.duration}ms\n\n`, 'utf8');
+
+  } else fs.appendFileSync(file, 'Execution stopped after 2 minutes.');
 };
 
 const solvePuzzle = ({ options, files }) => {

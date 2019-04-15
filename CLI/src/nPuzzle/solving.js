@@ -38,20 +38,23 @@ const solvePuzzle = ({ heuristic, uniformCost, greedy, filename }) => ( // eslin
     if (Puzzle.size > 4) console.log('Warning: puzzle is big so it can take time to solve.');
 
     // Solve puzzle
-    Puzzle.solve();
-
-    // Print results
+    const solved = Puzzle.solve();
     console.log(`\nHeuristic: ${Puzzle.heuristic}`);
     if (Puzzle.greedySearch) console.log('greedy activated\n');
     else console.log('greedy deactivated\n');
-    console.log(`Number of swaps: ${Puzzle.numberOfSwaps}`);
-    console.log(`Complexity in size: ${Puzzle.complexityInSize}`);
-    console.log(`Complexity in time: ${Puzzle.complexityInTime}`);
-    console.log(`Execution duration: ${Puzzle.duration}ms\n`);
-    Puzzle.finalSet.forEach((step, idx) => {
-      if (idx) console.log(`\nMove: ${step.move}\n`);
-      Puzzle.printPuzzle(step.puzzle);
-    });
+    if (solved) {
+
+      // Print results
+      console.log(`Number of swaps: ${Puzzle.numberOfSwaps}`);
+      console.log(`Complexity in size: ${Puzzle.complexityInSize}`);
+      console.log(`Complexity in time: ${Puzzle.complexityInTime}`);
+      console.log(`Execution duration: ${Puzzle.duration}ms\n`);
+      Puzzle.finalSet.forEach((step, idx) => {
+        if (idx) console.log(`\nMove: ${step.move}\n`);
+        Puzzle.printPuzzle(step.puzzle);
+      });
+
+    } else console.log('Execution stopped after 2 minutes.');
 
     return resolve();
   })

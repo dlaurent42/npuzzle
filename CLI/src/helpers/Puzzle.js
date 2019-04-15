@@ -370,10 +370,14 @@ class PuzzleSolver extends Puzzle {
     }, 0);
 
     // Define a variable to determine wheter to continue or not
+    let duration = 0;
     let solutionFound = false;
 
     // Main loop
-    while (!solutionFound) {
+    while (!solutionFound && duration < 1000 * 60 * 2) {
+
+      // Assess solving duration
+      duration = Math.abs(timestamp.diff(moment()));
 
       // Assess complexity in size
       this.complexityInSize = Math.max(this.complexityInSize, this.OpenSet.items.length);
@@ -391,7 +395,7 @@ class PuzzleSolver extends Puzzle {
         this.complexityInTime = this.closedSet.length;
         this.duration = Math.abs(timestamp.diff(moment()));
         this.getFinalSet();
-        return;
+        return true;
       }
 
       // Find data relative to element 0
@@ -403,6 +407,7 @@ class PuzzleSolver extends Puzzle {
       if (element.move !== 'left' && zero.x + 1 < this.size) this.swapTiles(element, 'right');
       if (element.move !== 'right' && zero.x) this.swapTiles(element, 'left');
     }
+    return false;
   }
 }
 
