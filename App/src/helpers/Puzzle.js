@@ -160,35 +160,6 @@ class Puzzle {
       this.solvable = (numberOfRows % 2 !== numberOfPermutations % 2);
     }
   }
-
-  printErrors() {
-    if (this.errors.length === 0) console.log('No error occured during parsing.');
-    else this.errors.forEach((err, idx) => { console.log(`[Parsing error ${idx + 1}]: ${err}`); });
-  }
-
-  printPuzzlePaddedValue(value) {
-    let str = value.toString();
-    const aimedSize = ((this.size ** 2) - 1).toString().length;
-    while (str.length < aimedSize) {
-      str = ` ${str}`;
-    }
-    return str;
-  }
-
-  printPuzzle(puzzle) {
-    let y = 0;
-    while (y < this.size) {
-      let x = 0;
-      while (x < this.size) {
-        const obj = find(puzzle, { x, y });
-        process.stdout.write(`${this.printPuzzlePaddedValue(obj.value)}`);
-        x += 1;
-        if (x < this.size) process.stdout.write(' ');
-      }
-      console.log('');
-      y += 1;
-    }
-  }
 }
 
 class PuzzleSolver extends Puzzle {

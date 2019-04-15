@@ -213,24 +213,6 @@ class PuzzleSolver extends Puzzle {
     this.OpenSet = new PriorityQueue();
   }
 
-  // Function to reset solver (used to starts a new resolution)
-  reset(heuristic, uniformCost, greedySearch) {
-    // Parameters
-    this.heuristic = heuristic || HEURISTICS.MANHATTAN;
-    this.uniformCost = uniformCost || false;
-    this.greedySearch = greedySearch || false;
-
-    // Indicators
-    this.numberOfSwaps = 0;
-    this.complexityInSize = 1;
-    this.complexityInTime = 1;
-
-    // Sets used to solve puzzle
-    this.finalSet = [];
-    this.closedSet = [];
-    this.OpenSet = new PriorityQueue();
-  }
-
   // Function to convert a puzzle structure into a string used as index
   puzzleToIndex(puzzle) {
     let y = 0;
