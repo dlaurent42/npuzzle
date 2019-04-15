@@ -12,7 +12,7 @@ const shuffle = props => (
   <Form show={props.show} classNames={['Shuffle']}>
     <h1>Puzzle size</h1>
     <Sizes shuffleSize={props.shuffleSize} onSizeChange={props.onSizeChange} />
-    <h1>Mixing level level</h1>
+    <h1>Mixing level</h1>
     <Iterations
       shuffleIterations={props.shuffleIterations}
       onIterationsChange={props.onIterationsChange}
