@@ -225,7 +225,7 @@ class App extends Component {
   // Rendering
   render() {
     const error = (this.state.error) ? <div className="App-mask">{`Puzzle could not be solved in ${EXECTIME / 1000} seconds.`}</div> : null;
-    const easterEggSolve = (this.state.displaySolvedEgg) ? <div className="App-mask">{EASTEREGGS[Math.floor(Math.random() * 2)]}</div> : null;
+    const easterEggSolve = (this.state.displaySolvedEgg) ? <div className="App-mask Animated-gif">{EASTEREGGS[Math.floor(Math.random() * 2)]}</div> : null;
     const easterEggRabbit = (this.state.displayRabbit) ? <div className="App-mask"><EasterEgg /></div> : null;
     return (
       <div className="App">

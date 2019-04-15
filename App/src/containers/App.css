@@ -84,6 +84,11 @@
   color: white;
 }
 
+.Animated-gif ._1Oq2CtPF8ivpXu9fIdM3cH,
+.Animated-gif ._1Q-28QiIbiMcgz_OiDW2hh {
+ overflow: hidden;
+}
+
 @media (max-width: 500px) {
 
   .App-modal {
