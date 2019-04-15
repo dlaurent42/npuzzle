@@ -52,8 +52,10 @@ class App extends Component {
     shuffleSize: 3,
     shuffleIterations: 1000,
 
+    // Easter egg
     easterEgg: false,
     displaySolvedEgg: false,
+    displayRabbit: false,
   }
 
   // Lifecyle Hook
@@ -105,9 +107,13 @@ class App extends Component {
 
   // Activate / Deactive easter egg
   toggleEasterEgg = () => {
-    if (this.state.easterEgg) console.dir('easter egg deactivated');
-    else console.dir('easter egg activated');
-    this.setState(prevState => ({ easterEgg: !prevState.easterEgg }));
+    const { easterEgg } = this.state;
+    if (easterEgg) this.setState({ easterEgg: false });
+    else {
+      this.setState({ easterEgg: true, displayRabbit: true }, () => {
+        setTimeout(() => this.setState({ displayRabbit: false }), 5000);
+      });
+    }
   }
 
   // Action handlers for shuffle
@@ -187,16 +193,16 @@ class App extends Component {
 
   // Action handlers for controls and solving
   handleSolvePuzzle = () => {
-    const solved = this.state.Puzzle.solve(); // eslint-disable-line
-    if (solved && !this.state.easterEgg) this.setState({ solved });
+    const solved = this.state.Puzzle.solve();
+    if (solved && !this.state.easterEgg) this.setState(() => ({ solved: true }));
     else if (solved && this.state.easterEgg) {
       this.setState(
-        { solved, displaySolvedEgg: true },
+        () => ({ solved: true, displaySolvedEgg: true }),
         () => { setTimeout(() => { this.setState({ displaySolvedEgg: false }); }, 5000); }
       );
     } else {
       this.setState(
-        { error: true },
+        () => ({ error: true }),
         () => { setTimeout(() => { this.setState({ error: false }); }, 3000); }
       );
     }
@@ -219,11 +225,13 @@ class App extends Component {
   // Rendering
   render() {
     const error = (this.state.error) ? <div className="App-mask">{`Puzzle could not be solved in ${EXECTIME / 1000} seconds.`}</div> : null;
-    const easterEgg = (this.state.displaySolvedEgg) ? <div className="App-mask">{EASTEREGGS[Math.floor(Math.random() * 2)]}</div> : null;
+    const easterEggSolve = (this.state.displaySolvedEgg) ? <div className="App-mask">{EASTEREGGS[Math.floor(Math.random() * 2)]}</div> : null;
+    const easterEggRabbit = (this.state.displayRabbit) ? <div className="App-mask"><EasterEgg /></div> : null;
     return (
       <div className="App">
         {error}
-        {easterEgg}
+        {easterEggSolve}
+        {easterEggRabbit}
         <Header
           displaySettings={this.state.displaySettings}
           displayShuffle={this.state.displayShuffle}
@@ -287,7 +295,6 @@ class App extends Component {
           />
         </div>
         <Footer />
-        <EasterEgg show={this.state.easterEgg} />
       </div>
     );
   }

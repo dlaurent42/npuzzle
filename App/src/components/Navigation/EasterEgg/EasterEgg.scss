@@ -1,5 +1,3 @@
-@import "compass/css3";
-
 .Rabbit {
   width:5em;
   height:3em;
@@ -7,7 +5,7 @@
   border-radius:70% 90% 60% 50%;
   position:relative;
   box-shadow: -0.2em 1em 0 -0.75em #b78e81;
-  @include transform(rotate(0deg) translate(-2em,0));
+  transform: rotate(0deg) translate(-2em,0);
   animation: hop 1s infinite linear;
   z-index:1;
   .no-flexbox & {margin:10em auto 0;}
@@ -37,7 +35,7 @@
     height:2em;
     background:white;
     border-radius:50% 100% 0 0;
-    @include transform(rotate(-30deg));
+    transform: rotate(-30deg);
     right:1em;
     top:-1em;
     border-top:1px solid #f7f5f4;
@@ -53,8 +51,8 @@
   border-radius:100% 100% 0 0;
   position:relative;
   top:-5em;
-  @include opacity(0);
-  @include transform(translate(0,0));
+  opacity: 0;
+  transform: translate(0,0);
   animation: cloudy 1s infinite linear forwards;
   box-shadow:5em 2em 0 -0.3em white, -2em 2em 0 0 white;
   &:before,&:after {
@@ -83,15 +81,15 @@
 
 @keyframes hop {
   20% {
-    @include transform(rotate(-10deg) translate(1em,-2em));
+    transform: rotate(-10deg) translate(1em,-2em);
     box-shadow: -0.2em 3em 0 -1em #b78e81;
   }
   40% {
-    @include transform(rotate(10deg) translate(3em,-4em));
+    transform: rotate(10deg) translate(3em,-4em);
     box-shadow: -0.2em 3.25em 0 -1.1em #b78e81;
   }
   60%,75% {
-    @include transform(rotate(0) translate(4em,0));
+    transform: rotate(0) translate(4em,0);
     box-shadow: -0.2em 1em 0 -0.75em #b78e81;
   }
 }
@@ -119,14 +117,14 @@
 
 @keyframes cloudy {
  40% {
-    @include opacity(0.75);
-    @include transform(translate(-3em,0));
+    opacity: 0.75;
+    transform: translate(-3em,0);
   }
   55% {
-    @include opacity(0);
-    @include transform(translate(-4em,0));
+    opacity: 0;
+    transform: translate(-4em,0);
   }
   90% {
-    @include transform(translate(0,0));
+    transform: translate(0,0);
   }
 }
