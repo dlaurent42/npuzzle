@@ -37,6 +37,6 @@ Project has been realized using Javascript and is composed of 2 distincts parts:
 
 ![Solver 4*4 and color settings screenshot](https://github.com/dlaurent42/npuzzle/blob/master/docs/3.png)
 
-### Eeaster Egg
+### Eeaster Egg Animation
 
 ![easter egg screenshot](https://github.com/dlaurent42/npuzzle/blob/master/docs/2.png)
