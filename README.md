@@ -1,4 +1,4 @@
-# RED TETRIS
+# N-PUZZLE
 
 #### Final Mark: 121 / 121
 
@@ -31,12 +31,12 @@ Project has been realized using Javascript and is composed of 2 distincts parts:
 
 ### Solver 3*3 and solving settings
 
-![Solver 3*3 and solving settings screenshot](https://github.com/dlaurent42/npuzzle/blob/master/docs/01.png)
+![Solver 3*3 and solving settings screenshot](https://github.com/dlaurent42/npuzzle/blob/master/docs/1.png)
 
 ### Solver 4*4 and color settings
 
-![Solver 4*4 and color settings screenshot](https://github.com/dlaurent42/npuzzle/blob/master/docs/03.png)
+![Solver 4*4 and color settings screenshot](https://github.com/dlaurent42/npuzzle/blob/master/docs/3.png)
 
 ### Eeaster Egg
 
-![easter egg screenshot](https://github.com/dlaurent42/npuzzle/blob/master/docs/02.png)
+![easter egg screenshot](https://github.com/dlaurent42/npuzzle/blob/master/docs/2.png)
